@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.Entity;
 using MyDocuments.DAL.Entities;
 
@@ -16,11 +12,13 @@ namespace MyDocuments.DAL.EF
         {
             Database.SetInitializer<DocumentContext>(new DocumentDbInitializer());
         }
+        
         public DocumentContext(string connectionString)
            : base(connectionString)
         {
         }
     }
+
     public class DocumentDbInitializer : DropCreateDatabaseIfModelChanges<DocumentContext>
     {
         protected override void Seed(DocumentContext db)

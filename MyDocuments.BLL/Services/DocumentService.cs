@@ -11,11 +11,11 @@ using AutoMapper;
 
 namespace MyDocuments.BLL.Services
 {
-    class DocumentService : BaseService, IDocumentService
+    public class DocumentService : BaseService, IDocumentService
     {
         public DocumentService(IUnitOfWork db) : base(db)
         {
-            Mapper.Initialize(cfg => { cfg.CreateMap<Document, DocumentDTO>(); cfg.CreateMap<DocumentDTO, Document>(); });
+            Mapper.Initialize(cfg => { cfg.CreateMap<Document, DocumentDTO>().ReverseMap(); });
         }
 
         public async Task<List<DocumentDTO>> GetAllDocuments()
@@ -64,5 +64,7 @@ namespace MyDocuments.BLL.Services
             }
             return false;
         }
+
+
     }
 }
