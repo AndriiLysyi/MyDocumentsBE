@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 using System.Data.Entity.Infrastructure;
+using MyDocuments.DAL.EF;
 
 namespace MyDocuments.DAL.Repositories
 {
@@ -14,9 +15,9 @@ namespace MyDocuments.DAL.Repositories
     {
 
         protected DbSet<T> DbSet;
-        protected DbContext Context;
+        protected DocumentContext Context;
 
-        public Repository(DbContext context)
+        public Repository(DocumentContext context)
         {
             DbSet = context.Set<T>();
             Context = context;

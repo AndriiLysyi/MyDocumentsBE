@@ -21,10 +21,13 @@ namespace MyDocuments.PL.App_Start
         public static void Configure()
         {
             var builder = new ContainerBuilder();
+            var config = GlobalConfiguration.Configuration;
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
-            //builder.RegisterType<DocumentContext>().As<DbContext>().InstancePerRequest();
+            builder.RegisterWebApiFilterProvider(config);
+            builder.RegisterWebApiModelBinderProvider();
+            builder.RegisterType<DocumentContext>().AsSelf().InstancePerRequest().WithParameter("connectionString", "DocumentContext");
             builder.RegisterType<DocumentService>().As<IDocumentService>().InstancePerRequest();
-           // builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().WithParameter(new InjectionConstructor("context", DocumentContext)) .InstancePerRequest();
+            builder.Register(c => new UnitOfWork(c.Resolve<DocumentContext>())).AsImplementedInterfaces().InstancePerRequest();
             var container = builder.Build();
             var resolver = new AutofacWebApiDependencyResolver(container);
             GlobalConfiguration.Configuration.DependencyResolver = resolver;

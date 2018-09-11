@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyDocuments.DAL.Repositories.Interfaces
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork: IDisposable
     {
         IDocumentRepository Documents { get; }
 
