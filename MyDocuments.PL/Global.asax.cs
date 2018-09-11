@@ -14,6 +14,7 @@ namespace MyDocuments.PL
         protected void Application_Start()
         {
             AutofacConfig.Configure();
+            AutoMapperConfig.Initialize();
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
         }

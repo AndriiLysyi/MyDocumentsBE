@@ -109,7 +109,7 @@ namespace MyDocuments.PL.Controllers
 
                 return Request.CreateErrorResponse(HttpStatusCode.NoContent, ("Not possibly to delete document: document does not exist."));
             }
-            catch (Exception e)
+            catch (Exception )
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Internal deletion error.");
             }

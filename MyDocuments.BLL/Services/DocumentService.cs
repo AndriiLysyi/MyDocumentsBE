@@ -15,7 +15,6 @@ namespace MyDocuments.BLL.Services
     {
         public DocumentService(IUnitOfWork db) : base(db)
         {
-            Mapper.Initialize(cfg => { cfg.CreateMap<Document, DocumentDTO>().ReverseMap(); });
         }
 
         public async Task<List<DocumentDTO>> GetAllDocuments()
