@@ -46,7 +46,7 @@ namespace MyDocuments.PL.Controllers
         }
 
         [HttpPost]
-        public async Task<HttpResponseMessage> Post(DocumentDTO document)
+        public async Task<HttpResponseMessage> Post([FromBody]DocumentDTO document)
         {
 
             try
@@ -71,6 +71,7 @@ namespace MyDocuments.PL.Controllers
         [Route("{id}")]
         public async Task<HttpResponseMessage> Put(int id, [FromBody]DocumentDTO document)
         {
+
             try
             {
                 var success = await documentService.UpdateDocumentById(id, document);
@@ -100,8 +101,6 @@ namespace MyDocuments.PL.Controllers
                 bool result = await documentService.RemoveDocumentById(id);
                 if (result)
                 {
-                    var log = $"Succesfully deleted document with id = {id}";
-
                     return Request.CreateResponse(HttpStatusCode.OK, $"Succesfully deleted document id: {id}.");
                 }
 

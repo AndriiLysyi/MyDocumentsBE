@@ -11,8 +11,6 @@ namespace MyDocuments.DAL.Repositories
 
         private IDocumentRepository documentsRepository;
 
-        private bool disposed = false;
-
         public UnitOfWork(DocumentContext context)
         {
             this.context = context;
@@ -24,22 +22,13 @@ namespace MyDocuments.DAL.Repositories
         {
             await context.SaveChangesAsync();
         }
-        public virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    context.Dispose();
-                }
-                this.disposed = true;
-            }
-        }
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+           if(this.context != null)
+           {
+                context.Dispose();
+           }
         }
     }
 }

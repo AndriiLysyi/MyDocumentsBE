@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyDocuments.PL.Filters;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -17,7 +18,8 @@ namespace MyDocuments.PL
             string url = ConfigurationManager.AppSettings["ApiUrl"];
             config.EnableCors(new EnableCorsAttribute(url, headers: "*", methods: "*"));
 
-           
+            config.Filters.Add(new ValidateModelAttribute());
+
             // Web API routes
             config.MapHttpAttributeRoutes();
 

@@ -19,21 +19,21 @@ namespace MyDocuments.BLL.Services
 
         public async Task<List<DocumentDTO>> GetAllDocuments()
         {
-            var AllDocuments = await UoW.Documents.GetAll();
-            return Mapper.Map<List<Document>, List<DocumentDTO>>(AllDocuments);
+            var documents = await UoW.Documents.GetAll();
+            return Mapper.Map<List<Document>, List<DocumentDTO>>(documents);
         }
 
         public async Task<DocumentDTO> GetDocumentById(int id)
         {
-            var Document = await UoW.Documents.Get(id);
-            return Mapper.Map<Document, DocumentDTO>(Document);
+            var document = await UoW.Documents.Get(id);
+            return Mapper.Map<Document, DocumentDTO>(document);
         }
         public async Task<bool> RemoveDocumentById(int id)
         {
-            var Document = await UoW.Documents.Get(id);
-            if (Document != null)
+            var document = await UoW.Documents.Get(id);
+            if (document != null)
             {
-                UoW.Documents.Remove(Document);
+                UoW.Documents.Remove(document);
                 await UoW.Documents.SaveAsync();
                 return true;
             }
