@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Http;
 namespace MyDocuments.PL.Controllers
 {
+    [RoutePrefix("api/document")]
     public class DocumentController : ApiController
     {
         private readonly IDocumentService documentService;
@@ -19,7 +20,6 @@ namespace MyDocuments.PL.Controllers
         }
 
         [HttpGet]
-        [Route("")]
         public async Task<HttpResponseMessage> Get()
         {
             var documents = await documentService.GetAllDocuments();
@@ -34,7 +34,6 @@ namespace MyDocuments.PL.Controllers
 
         [HttpGet]
         [Route("{id}")]
-
         public async Task<HttpResponseMessage> Get(int id)
         {
             var document = await documentService.GetDocumentById(id);
@@ -47,7 +46,6 @@ namespace MyDocuments.PL.Controllers
         }
 
         [HttpPost]
-        [Route("")]
         public async Task<HttpResponseMessage> Post(DocumentDTO document)
         {
 
@@ -70,7 +68,7 @@ namespace MyDocuments.PL.Controllers
         }
 
         [HttpPut]
-        [Route("{id}/update/{value}")]
+        [Route("{id}")]
         public async Task<HttpResponseMessage> Put(int id, [FromBody]DocumentDTO document)
         {
             try
