@@ -19,6 +19,8 @@ namespace MyDocuments.BLL.Services
 
         public async Task<List<DocumentDTO>> GetAllDocuments()
         {
+            throw new NotImplementedException();
+            //throw new NotImplementedException()
             var documents = await UoW.Documents.GetAll();
             return Mapper.Map<List<Document>, List<DocumentDTO>>(documents);
         }
@@ -46,22 +48,18 @@ namespace MyDocuments.BLL.Services
             await UoW.Documents.SaveAsync();
             return true;
         }
-        public async Task<bool> UpdateDocumentById(int id, DocumentDTO document)
+        public async Task<bool> UpdateDocumentById(int id, DocumentDTO documentDTO)
         {
-            var Document = await UoW.Documents.Get(id);
-            // TODO: add validator dto  
-            if (Document != null)
+            var document = await UoW.Documents.Get(id);
+            if (document != null)
             {
-                Document.Author = document.Author;
-                Document.Description = document.Description;
-                Document.Name = document.Name;
-                Document.Type = document.Type;
-                Document.ModifiedDate = DateTime.UtcNow; // TODO : add trigger
-                UoW.Documents.Update(Document);
+                documentDTO.ModifiedDate = DateTime.UtcNow; // TODO : add trigger
+                document = Mapper.Map<DocumentDTO, Document>(documentDTO, document);
                 await UoW.Documents.SaveAsync();
                 return true;
             }
             return false;
+
         }
 
 

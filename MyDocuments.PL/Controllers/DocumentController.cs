@@ -22,7 +22,7 @@ namespace MyDocuments.PL.Controllers
         [HttpGet]
         public async Task<HttpResponseMessage> Get()
         {
-            var documents = await documentService.GetAllDocuments();
+            var documents =  await documentService.GetAllDocuments();
 
             if (documents.Count() != 0)
             {
@@ -41,7 +41,6 @@ namespace MyDocuments.PL.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.OK, document);
             }
-
             return Request.CreateErrorResponse(HttpStatusCode.NotFound, $"There isn't document with id = {id}");
         }
 
@@ -78,7 +77,7 @@ namespace MyDocuments.PL.Controllers
                 if (success)
                 {
                     var message = $"Succesfully updated document with id = {id} ";
-                    return Request.CreateResponse(HttpStatusCode.OK, "Succesfully updated task for user.");
+                    return Request.CreateResponse(HttpStatusCode.OK, "Succesfully updated document.");
                 }
 
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Incorrect request syntax or document does not exist.");

@@ -1,4 +1,5 @@
 ﻿using MyDocuments.PL.Filters;
+using MyDocuments.PL.Logger;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Web.Http.ExceptionHandling;
 
 namespace MyDocuments.PL
 {
@@ -19,7 +21,8 @@ namespace MyDocuments.PL
             config.EnableCors(new EnableCorsAttribute(url, headers: "*", methods: "*"));
 
             config.Filters.Add(new ValidateModelAttribute());
-
+            config.Filters.Add(new ExceptionHandlingAttribute());
+            config.Services.Replace(typeof(IExceptionLogger), new UnhandledExceptionLogger());
             // Web API routes
             config.MapHttpAttributeRoutes();
 
