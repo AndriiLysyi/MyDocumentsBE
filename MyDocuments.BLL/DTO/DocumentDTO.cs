@@ -30,7 +30,7 @@ namespace MyDocuments.BLL.DTO
         [RegularExpression(ValidationRules.DOCUMENT_Type,
             ErrorMessage = "Type could be only ['txt','pdf','doc','docx'] ")]
         public string Type { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime? CreateDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
     }
 }

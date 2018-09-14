@@ -146,6 +146,10 @@
       <Project>{88e66c1c-a4c3-4a45-afd5-d527a77a064a}</Project>
       <Name>MyDocuments.DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MyDocuments.Services\MyDocuments.Services.csproj">
+      <Project>{8f1a8874-9070-4b47-a2da-beca493f1b97}</Project>
+      <Name>MyDocuments.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

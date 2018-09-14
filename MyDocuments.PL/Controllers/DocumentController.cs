@@ -1,5 +1,5 @@
 ﻿using MyDocuments.BLL.DTO;
-using MyDocuments.BLL.Interfaces;
+using MyDocuments.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,8 +48,6 @@ namespace MyDocuments.PL.Controllers
         public async Task<HttpResponseMessage> Post([FromBody]DocumentDTO document)
         {
 
-            try
-            {
                 var success = await documentService.AddDocument(document);
                 if (success)
                 {
@@ -58,11 +56,6 @@ namespace MyDocuments.PL.Controllers
                 }
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Server error");
 
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
-            }
 
         }
 
@@ -70,24 +63,14 @@ namespace MyDocuments.PL.Controllers
         [Route("{id}")]
         public async Task<HttpResponseMessage> Put(int id, [FromBody]DocumentDTO document)
         {
-
-            try
+            var success = await documentService.UpdateDocumentById(id, document);
+            if (success)
             {
-                var success = await documentService.UpdateDocumentById(id, document);
-                if (success)
-                {
-                    var message = $"Succesfully updated document with id = {id} ";
-                    return Request.CreateResponse(HttpStatusCode.OK, "Succesfully updated document.");
-                }
-
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Incorrect request syntax or document does not exist.");
-            }
-            catch (Exception e)
-            {
-
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+                var message = $"Succesfully updated document with id = {id} ";
+                return Request.CreateResponse(HttpStatusCode.OK, "Succesfully updated document.");
             }
 
+            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Incorrect request syntax or document does not exist.");
         }
 
 
@@ -95,8 +78,7 @@ namespace MyDocuments.PL.Controllers
         [Route("{id}")]
         public async Task<HttpResponseMessage> Delete(int id)
         {
-            try
-            {
+
                 bool result = await documentService.RemoveDocumentById(id);
                 if (result)
                 {
@@ -104,11 +86,7 @@ namespace MyDocuments.PL.Controllers
                 }
 
                 return Request.CreateErrorResponse(HttpStatusCode.NoContent, ("Not possibly to delete document: document does not exist."));
-            }
-            catch (Exception )
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Internal deletion error.");
-            }
+
         }
     }
 }
