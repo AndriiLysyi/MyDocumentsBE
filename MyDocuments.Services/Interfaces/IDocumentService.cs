@@ -9,10 +9,10 @@ namespace MyDocuments.Services.Interfaces
 {
     public interface IDocumentService
     {
-        Task<List <DocumentDTO>> GetAllDocuments();
+        Task<List<DocumentDTO>> GetAllDocuments();
         Task<DocumentDTO> GetDocumentById(int id);
-        Task<bool> RemoveDocumentById(int id);
-        Task<bool> AddDocument(DocumentDTO documentDTO );
-        Task<bool> UpdateDocumentById(int id, DocumentDTO dto);
+        Task RemoveDocumentById(int id);
+        Task AddDocument(DocumentDTO documentDTO);
+        Task UpdateDocumentById(int id, DocumentDTO dto);
     }
 }

@@ -12,7 +12,7 @@ using MyDocuments.DAL.Repositories;
 using MyDocuments.DAL.Repositories.Interfaces;
 using MyDocuments.Services.Services;
 using MyDocuments.Services.Interfaces;
-
+using MyDocuments.BLL.Facades;
 
 namespace MyDocuments.PL.App_Start
 {
@@ -27,7 +27,8 @@ namespace MyDocuments.PL.App_Start
             builder.RegisterWebApiModelBinderProvider();
             builder.RegisterType<DocumentContext>().AsSelf().InstancePerRequest().WithParameter("connectionString", "DocumentContext");
             builder.RegisterType<DocumentService>().As<IDocumentService>().InstancePerRequest();
-            builder.RegisterType<BaseService>().As<IBaseService>().InstancePerRequest();
+           // builder.RegisterType<BaseService>().As<IBaseService>().InstancePerRequest();
+            builder.RegisterType<FacadeDocument>().AsSelf().InstancePerRequest();
             builder.Register(c => new UnitOfWork(c.Resolve<DocumentContext>())).AsImplementedInterfaces().InstancePerRequest();
             var container = builder.Build();
             var resolver = new AutofacWebApiDependencyResolver(container);

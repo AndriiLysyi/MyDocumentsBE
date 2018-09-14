@@ -49,8 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Facades\BaseFacade.cs" />
     <Compile Include="DTO\DocumentDTO.cs" />
     <Compile Include="DTO\ValidationRules.cs" />
+    <Compile Include="Facades\FacadeDocument.cs" />
+    <Compile Include="Map\MapService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

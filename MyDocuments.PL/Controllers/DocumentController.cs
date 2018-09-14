@@ -47,30 +47,20 @@ namespace MyDocuments.PL.Controllers
         [HttpPost]
         public async Task<HttpResponseMessage> Post([FromBody]DocumentDTO document)
         {
+            await documentService.AddDocument(document);
 
-                var success = await documentService.AddDocument(document);
-                if (success)
-                {
-                    var okMessage = $"Succesfully created document: {document.Name}";
-                    return Request.CreateResponse(HttpStatusCode.OK, okMessage);
-                }
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Server error");
-
-
+            var okMessage = $"Succesfully created document: {document.Name}";
+            return Request.CreateResponse(HttpStatusCode.OK, okMessage);
         }
 
         [HttpPut]
         [Route("{id}")]
         public async Task<HttpResponseMessage> Put(int id, [FromBody]DocumentDTO document)
         {
-            var success = await documentService.UpdateDocumentById(id, document);
-            if (success)
-            {
-                var message = $"Succesfully updated document with id = {id} ";
-                return Request.CreateResponse(HttpStatusCode.OK, "Succesfully updated document.");
-            }
+            await documentService.UpdateDocumentById(id, document);
 
-            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Incorrect request syntax or document does not exist.");
+            var message = $"Succesfully updated document with id = {id} ";
+            return Request.CreateResponse(HttpStatusCode.OK, "Succesfully updated document.");
         }
 
 
@@ -78,15 +68,9 @@ namespace MyDocuments.PL.Controllers
         [Route("{id}")]
         public async Task<HttpResponseMessage> Delete(int id)
         {
+            await documentService.RemoveDocumentById(id);
 
-                bool result = await documentService.RemoveDocumentById(id);
-                if (result)
-                {
-                    return Request.CreateResponse(HttpStatusCode.OK, $"Succesfully deleted document id: {id}.");
-                }
-
-                return Request.CreateErrorResponse(HttpStatusCode.NoContent, ("Not possibly to delete document: document does not exist."));
-
+            return Request.CreateResponse(HttpStatusCode.OK, $"Succesfully deleted document id: {id}.");
         }
     }
 }

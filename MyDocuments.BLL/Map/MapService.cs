@@ -7,7 +7,7 @@ using AutoMapper;
 using MyDocuments.BLL.DTO;
 using MyDocuments.DAL.Entities;
 
-namespace MyDocuments.Services.Services
+namespace MyDocuments.BLL.Map
 {
     public static class MapService
     {

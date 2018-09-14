@@ -20,12 +20,25 @@ namespace MyDocuments.PL.Filters
                     Content = new StringContent(context.Exception.Message)
                 };
             }
-
-            context.Response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+            else
             {
-                Content = new StringContent("An error occurred, please try again or contact the administrator."),
-                ReasonPhrase = "Critical Exception"
-            };
+                if (context.Exception is Exception)
+                {
+                    context.Response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    {
+                        Content = new StringContent(context.Exception.Message)
+                    };
+                }
+                else
+                {
+                    context.Response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                    {
+                        Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                        ReasonPhrase = "Critical Exception"
+                    };
+                }
+            }
+            
 
 
         }

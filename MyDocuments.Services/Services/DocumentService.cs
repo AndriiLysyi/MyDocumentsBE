@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MyDocuments.Services.Interfaces;
 using MyDocuments.BLL.DTO;
+using MyDocuments.BLL.Facades;
 using MyDocuments.DAL.Repositories.Interfaces;
 using MyDocuments.DAL.Entities;
 using AutoMapper;
@@ -13,48 +14,39 @@ namespace MyDocuments.Services.Services
 {
     public class DocumentService : IDocumentService
     {
-        private readonly IBaseService baseService;
-        public DocumentService(IBaseService baseService) 
+        private readonly FacadeDocument facadeDocument;
+        public DocumentService(FacadeDocument facade) 
         {
-            this.baseService = baseService;
+            this.facadeDocument = facade;
         }
 
         public async Task<List<DocumentDTO>> GetAllDocuments()
         {
-            var documents = await baseService.GetAllAsync();
-            return MapService.ToListDto(documents);
+            var documents = await facadeDocument.GetDocumentsAsync();
+            return documents;
         }
 
         public async Task<DocumentDTO> GetDocumentById(int id)
         {
-            
-            var document = await baseService.GetAsync(id);
-            return MapService.ToDto(document);
+            if (id <= 0) throw new Exception("Id should be more than 0");
+            var document = await facadeDocument.GetDocumentByIdAsync(id);
+            return document;
         }
-        public async Task<bool> RemoveDocumentById(int id)
+        public async Task RemoveDocumentById(int id)
         {
-            throw new NotImplementedException();
+            if (id <= 0) throw new Exception("Id should be more than 0");
+            await facadeDocument.RemoveDocumentById(id);
 
         }
-        public async Task<bool> AddDocument(DocumentDTO documentDTO)
+        public async Task AddDocument(DocumentDTO documentDTO)
         {
-            documentDTO.CreateDate = DateTime.UtcNow;
-            await baseService.AddAsync(MapService.ToEntity(documentDTO));
-            
-            return true;
+            await facadeDocument.AddDocumentAsync(documentDTO);
+
         }
-        public async Task<bool> UpdateDocumentById(int id, DocumentDTO documentDTO)
+        public async Task UpdateDocumentById(int id, DocumentDTO documentDTO)
         {
-
-            var document = await baseService.GetAsync(id);
-            if (document != null)
-            {
-                documentDTO.ModifiedDate = DateTime.UtcNow; // TODO : add trigger
-                await baseService.UpdateAsync(MapService.ToEntityForUpdate(documentDTO,document));
-                return true;
-            }
-            return false;
-
+            if (id <= 0) throw new Exception("Id should be more than 0");
+            await facadeDocument.UpdateDocumentAsync(id, documentDTO);
         }
 
 
