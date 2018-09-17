@@ -23,11 +23,15 @@ namespace MyDocuments.DAL.EF
     {
         protected override void Seed(DocumentContext db)
         {
+
+           for(int i=0; i<100; i++)
+            { 
             db.Documents.Add(new Document { Name = "CV", Description = "my own cv", Author = "Andrii Lysyi", Type = "txt", CreateDate = DateTime.UtcNow });
             db.Documents.Add(new Document { Name = "CV1", Description = "my own cv1", Author = "Andrii Lysyi2", Type = "txt", CreateDate = DateTime.UtcNow });
             db.Documents.Add(new Document { Name = "CV2", Description = "my own cv2", Author = "Andrii Lysyi3", Type = "txt", CreateDate = DateTime.UtcNow });
+            }
             db.SaveChanges();
-            base.Seed(db);
+  //          base.Seed(db);
         }
     }
 }

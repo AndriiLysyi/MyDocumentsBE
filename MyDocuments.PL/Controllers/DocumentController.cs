@@ -22,11 +22,26 @@ namespace MyDocuments.PL.Controllers
         [HttpGet]
         public async Task<HttpResponseMessage> Get()
         {
-            var documents =  await documentService.GetAllDocuments();
+            var documents = await documentService.GetAllDocuments();
 
             if (documents.Count() != 0)
             {
                 return Request.CreateResponse<IEnumerable<DocumentDTO>>(HttpStatusCode.OK, documents);
+            }
+            const string message = "No documents in database.";
+            return Request.CreateErrorResponse(HttpStatusCode.NoContent, message);
+        }
+
+
+        [HttpGet]
+        [Route("{pageNumber}/{pageSize}")]
+        public async Task<HttpResponseMessage> Get(int pageNumber, int pageSize)
+        {
+            var documents = await documentService.GetDocumentsInPagedList(pageNumber, pageSize);
+
+            if (documents!= null)
+            {
+                return Request.CreateResponse<PagedListDocumentDTO>(HttpStatusCode.OK, documents);
             }
             const string message = "No documents in database.";
             return Request.CreateErrorResponse(HttpStatusCode.NoContent, message);

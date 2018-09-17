@@ -26,6 +26,15 @@ namespace MyDocuments.Services.Services
             return documents;
         }
 
+
+        public async Task<PagedListDocumentDTO> GetDocumentsInPagedList(int pageNumber, int pageSize )
+        {
+
+            var documents = await facadeDocument.GetDocumentsInPagedListAsync(pageNumber, pageSize);
+            return documents;
+        }
+
+
         public async Task<DocumentDTO> GetDocumentById(int id)
         {
             if (id <= 0) throw new Exception("Id should be more than 0");
