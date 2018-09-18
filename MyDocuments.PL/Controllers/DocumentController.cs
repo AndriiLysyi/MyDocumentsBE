@@ -24,7 +24,7 @@ namespace MyDocuments.PL.Controllers
         {
             var documents = await documentService.GetAllDocuments();
 
-            if (documents.Count() != 0)
+            if (documents.Count != 0)
             {
                 return Request.CreateResponse<IEnumerable<DocumentDTO>>(HttpStatusCode.OK, documents);
             }
@@ -34,12 +34,12 @@ namespace MyDocuments.PL.Controllers
 
 
         [HttpGet]
-        [Route("{pageNumber}/{pageSize}")]
+        [Route("{pageNumber:int}/{pageSize:int}")]
         public async Task<HttpResponseMessage> Get(int pageNumber, int pageSize)
         {
             var documents = await documentService.GetDocumentsInPagedList(pageNumber, pageSize);
 
-            if (documents!= null)
+            if (documents.Items.Count != 0)
             {
                 return Request.CreateResponse<PagedListDocumentDTO>(HttpStatusCode.OK, documents);
             }
@@ -60,10 +60,14 @@ namespace MyDocuments.PL.Controllers
         }
 
         [HttpPost]
-        public async Task<HttpResponseMessage> Post([FromBody]DocumentDTO document)
+        public async Task<HttpResponseMessage> Post([FromBody]DocumentDTO documentDTO)
         {
-            await documentService.AddDocument(document);
-
+           var document = await documentService.AddDocument(documentDTO);
+            if (document != null)
+            {
+               
+                return Request.CreateResponse(HttpStatusCode.OK, document);
+            }
             var okMessage = $"Succesfully created document: {document.Name}";
             return Request.CreateResponse(HttpStatusCode.OK, okMessage);
         }

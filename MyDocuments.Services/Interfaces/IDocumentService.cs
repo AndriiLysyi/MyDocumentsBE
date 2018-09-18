@@ -12,7 +12,7 @@ namespace MyDocuments.Services.Interfaces
         Task<List<DocumentDTO>> GetAllDocuments();
         Task<DocumentDTO> GetDocumentById(int id);
         Task RemoveDocumentById(int id);
-        Task AddDocument(DocumentDTO documentDTO);
+        Task<DocumentDTO> AddDocument(DocumentDTO documentDTO);
         Task UpdateDocumentById(int id, DocumentDTO dto);
         Task<PagedListDocumentDTO> GetDocumentsInPagedList(int pageNumber, int pageSize);
     }

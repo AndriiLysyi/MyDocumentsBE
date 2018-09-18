@@ -27,9 +27,8 @@ namespace MyDocuments.Services.Services
         }
 
 
-        public async Task<PagedListDocumentDTO> GetDocumentsInPagedList(int pageNumber, int pageSize )
+        public async Task<PagedListDocumentDTO> GetDocumentsInPagedList(int pageNumber, int pageSize)
         {
-
             var documents = await facadeDocument.GetDocumentsInPagedListAsync(pageNumber, pageSize);
             return documents;
         }
@@ -47,9 +46,9 @@ namespace MyDocuments.Services.Services
             await facadeDocument.RemoveDocumentById(id);
 
         }
-        public async Task AddDocument(DocumentDTO documentDTO)
+        public async Task<DocumentDTO> AddDocument(DocumentDTO documentDTO)
         {
-            await facadeDocument.AddDocumentAsync(documentDTO);
+           return await facadeDocument.AddDocumentAsync(documentDTO);
 
         }
         public async Task UpdateDocumentById(int id, DocumentDTO documentDTO)
