@@ -29,6 +29,7 @@ namespace MyDocuments.Services.Services
 
         public async Task<PagedListDocumentDTO> GetDocumentsInPagedList(int pageNumber, int pageSize)
         {
+            if (pageSize < 0) throw new Exception("Page size should more than 0");
             var documents = await facadeDocument.GetDocumentsInPagedListAsync(pageNumber, pageSize);
             return documents;
         }
@@ -48,13 +49,13 @@ namespace MyDocuments.Services.Services
         }
         public async Task<DocumentDTO> AddDocument(DocumentDTO documentDTO)
         {
-           return await facadeDocument.AddDocumentAsync(documentDTO);
-
+            return await facadeDocument.AddDocumentAsync(documentDTO);
         }
-        public async Task UpdateDocumentById(int id, DocumentDTO documentDTO)
+        public async Task<DocumentDTO> UpdateDocumentById(int id, DocumentDTO documentDTO)
         {
             if (id <= 0) throw new Exception("Id should be more than 0");
-            await facadeDocument.UpdateDocumentAsync(id, documentDTO);
+            return await facadeDocument.UpdateDocumentAsync(id, documentDTO);
+            
         }
 
 

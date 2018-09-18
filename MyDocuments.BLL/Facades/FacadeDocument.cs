@@ -28,27 +28,18 @@ namespace MyDocuments.BLL.Facades
         {
             var documents = await UoW.Documents.GetPagedList();
             var pagedListDocumentDto = new PagedListDocumentDTO();
-
-            pagedListDocumentDto.TotalCount = documents.Count();
             pagedListDocumentDto.PageSize = pageSize;
-            pagedListDocumentDto.NumberOfPages = (int)Math.Ceiling(pagedListDocumentDto.TotalCount / (double)pagedListDocumentDto.PageSize);
-                       
-            pagedListDocumentDto.PageNumber = (pageNumber > pagedListDocumentDto.NumberOfPages || pageNumber < 1)? 1 : pageNumber;
-
-            var pagedListDTO =  documents.Skip((pagedListDocumentDto.PageNumber - 1) * pagedListDocumentDto.PageSize).Take(pagedListDocumentDto.PageSize).ToList();
-            if (pagedListDocumentDto.PageNumber > 1)
+            pagedListDocumentDto.TotalCount = documents.Count();
+            pagedListDocumentDto.NumberOfPages = (int)Math.Ceiling(pagedListDocumentDto.TotalCount / (double)pagedListDocumentDto.PageSize) - 1;
+            if (pageNumber > pagedListDocumentDto.NumberOfPages || pageNumber < 0 )
             {
-                pagedListDocumentDto.HasPrevious = true;
+                return pagedListDocumentDto;
             }
-            if (pagedListDocumentDto.PageNumber < pagedListDocumentDto.NumberOfPages)
-            {
-                pagedListDocumentDto.HasNext = true;
-            }
-            pagedListDocumentDto.Items = MapService.ToListDto(pagedListDTO );
-
+            pagedListDocumentDto.PageNumber = pageNumber;
+            var pagedListEntities =  documents.Skip((pagedListDocumentDto.PageNumber ) * pagedListDocumentDto.PageSize).Take(pagedListDocumentDto.PageSize).ToList();
+            pagedListDocumentDto = MapService.ToPagedListDto(pagedListDocumentDto , pagedListEntities);
 
             return pagedListDocumentDto;
-
         }
 
         public async Task<DocumentDTO> GetDocumentByIdAsync(int id)
@@ -77,7 +68,7 @@ namespace MyDocuments.BLL.Facades
             await UoW.Documents.SaveAsync();
             return MapService.ToDto(document); 
         }
-        public async Task UpdateDocumentAsync(int id, DocumentDTO documentDTO)
+        public async Task<DocumentDTO> UpdateDocumentAsync(int id, DocumentDTO documentDTO)
         {
             var document = await UoW.Documents.Get(id);
             if (document == null)
@@ -88,6 +79,7 @@ namespace MyDocuments.BLL.Facades
 
             UoW.Documents.Update(MapService.ToEntityForUpdate(documentDTO, document));
             await UoW.Documents.SaveAsync();
+            return MapService.ToDto(document);
         }
 
 

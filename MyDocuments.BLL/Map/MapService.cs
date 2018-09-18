@@ -31,7 +31,22 @@ namespace MyDocuments.BLL.Map
         }
         public static Document ToEntityForUpdate(DocumentDTO documentDTO, Document document)
         {
-            return Mapper.Map<DocumentDTO, Document>(documentDTO, document);
+            documentDTO.Id = document.Id;
+            documentDTO.CreateDate = document.CreateDate;
+            return  Mapper.Map<DocumentDTO, Document>(documentDTO, document);
+        }
+        public static PagedListDocumentDTO ToPagedListDto(PagedListDocumentDTO pagedListDocumentDTO, List<Document>  documents)
+        {
+            if (pagedListDocumentDTO.PageNumber > 0)
+            {
+                pagedListDocumentDTO.HasPrevious = true;
+            }
+            if (pagedListDocumentDTO.PageNumber < pagedListDocumentDTO.NumberOfPages)
+            {
+                pagedListDocumentDTO.HasNext = true;
+            }
+            pagedListDocumentDTO.Items = ToListDto(documents);
+            return pagedListDocumentDTO;
         }
 
     }

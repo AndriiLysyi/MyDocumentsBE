@@ -34,17 +34,19 @@ namespace MyDocuments.PL.Controllers
 
 
         [HttpGet]
-        [Route("{pageNumber:int}/{pageSize:int}")]
+ 
+        [Route("{pageNumber=pageNumber:int}/{pageSize=pageSize:int}")]
         public async Task<HttpResponseMessage> Get(int pageNumber, int pageSize)
         {
             var documents = await documentService.GetDocumentsInPagedList(pageNumber, pageSize);
 
-            if (documents.Items.Count != 0)
+            if (documents.Items != null)
             {
                 return Request.CreateResponse<PagedListDocumentDTO>(HttpStatusCode.OK, documents);
             }
-            const string message = "No documents in database.";
-            return Request.CreateErrorResponse(HttpStatusCode.NoContent, message);
+            string message = $"PageNumber  should between 0 and {documents.NumberOfPages} with PageSize = {documents.PageSize} ";
+
+            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, message);
         }
 
         [HttpGet]
@@ -66,20 +68,24 @@ namespace MyDocuments.PL.Controllers
             if (document != null)
             {
                
-                return Request.CreateResponse(HttpStatusCode.OK, document);
+                return Request.CreateResponse(HttpStatusCode.Created, document);
             }
-            var okMessage = $"Succesfully created document: {document.Name}";
-            return Request.CreateResponse(HttpStatusCode.OK, okMessage);
+            var message = $"Can`t create document ";
+            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, message);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<HttpResponseMessage> Put(int id, [FromBody]DocumentDTO document)
+        public async Task<HttpResponseMessage> Put(int id, [FromBody]DocumentDTO documentDTO)
         {
-            await documentService.UpdateDocumentById(id, document);
+            var document = await documentService.UpdateDocumentById(id, documentDTO);
+            if (document != null)
+            {
 
-            var message = $"Succesfully updated document with id = {id} ";
-            return Request.CreateResponse(HttpStatusCode.OK, "Succesfully updated document.");
+                return Request.CreateResponse(HttpStatusCode.OK, document);
+            }
+            var message = $"Can`t update document with id = {id} ";
+            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, message);
         }
 
 
