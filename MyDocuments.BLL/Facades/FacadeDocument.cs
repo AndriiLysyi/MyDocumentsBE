@@ -13,6 +13,11 @@ namespace MyDocuments.BLL.Facades
 {
     public class FacadeDocument: BaseFacade
     {
+        public enum Direction
+        {
+            asc,
+            desc
+        }
         public FacadeDocument(IUnitOfWork uow) : base(uow)
         {
         }
@@ -26,24 +31,22 @@ namespace MyDocuments.BLL.Facades
         }
         public async Task<PagedListDocumentDTO> GetDocumentsInPagedListAsync(int pageNumber, int pageSize, string criterion, string direction)
         {
-            var documents = await UoW.Documents.GetPagedList(criterion,direction);
-
-            //if (!string.IsNullOrEmpty(searchValue))
-            //{
-            //    documents = documents.Where(a => a.Name.Contains(searchValue) || a.Description.Contains(searchValue) || a.Author.Contains(searchValue));
-            //}
-
+            if (!(direction == Direction.asc.ToString() || direction == Direction.desc.ToString()))
+            {
+                direction = "asc";
+            }
+            var documents = await UoW.Documents.GetPagedList(criterion, direction);
             var pagedListDocumentDto = new PagedListDocumentDTO();
             pagedListDocumentDto.PageSize = pageSize;
             pagedListDocumentDto.TotalCount = documents.Count();
-            pagedListDocumentDto.NumberOfPages = (int)Math.Ceiling(pagedListDocumentDto.TotalCount / (double)pagedListDocumentDto.PageSize) - 1;
-            if (pageNumber > pagedListDocumentDto.NumberOfPages || pageNumber < 0 )
+            pagedListDocumentDto.NumberOfPages = (int)Math.Ceiling(pagedListDocumentDto.TotalCount / (double)pagedListDocumentDto.PageSize);
+            if (pageNumber > pagedListDocumentDto.NumberOfPages || pageNumber < 0)
             {
                 return pagedListDocumentDto;
             }
             pagedListDocumentDto.PageNumber = pageNumber;
-            var pagedListEntities =  documents.Skip((pagedListDocumentDto.PageNumber ) * pagedListDocumentDto.PageSize).Take(pagedListDocumentDto.PageSize).ToList();
-            pagedListDocumentDto = MapService.ToPagedListDto(pagedListDocumentDto , pagedListEntities);
+            var pagedListEntities = documents.Skip((pagedListDocumentDto.PageNumber) * pagedListDocumentDto.PageSize).Take(pagedListDocumentDto.PageSize).ToList();
+            pagedListDocumentDto = MapService.ToPagedListDto(pagedListDocumentDto, pagedListEntities);
 
             return pagedListDocumentDto;
         }

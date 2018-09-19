@@ -22,16 +22,11 @@ namespace MyDocuments.DAL.Repositories
         {
             var nodeForExpressionTree = Expression.Parameter(typeof(Document), "n");
             var prop = Expression.Property(nodeForExpressionTree, criterion);
-
             var expession = Expression.Lambda(prop, nodeForExpressionTree);
-
             string method = direction == "asc" ? "OrderBy" : "OrderByDescending";
-
             Type[] types = new Type[] { DbSet.AsQueryable().ElementType, expession.Body.Type };
-
-            var rs = Expression.Call(typeof(Queryable), method, types, DbSet.AsQueryable().Expression, expession);
-
-            return DbSet.AsQueryable().Provider.CreateQuery<Document>(rs);
+            var result = Expression.Call(typeof(Queryable), method, types, DbSet.AsQueryable().Expression, expession);
+            return DbSet.AsQueryable().Provider.CreateQuery<Document>(result);
 
 
         }
