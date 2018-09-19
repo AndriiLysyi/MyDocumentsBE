@@ -35,10 +35,10 @@ namespace MyDocuments.PL.Controllers
 
         [HttpGet]
  
-        [Route("{pageNumber=pageNumber:int}/{pageSize=pageSize:int}")]
-        public async Task<HttpResponseMessage> Get(int pageNumber, int pageSize)
+        [Route("{pageNumber:int}/{pageSize:int}/{criterion}/{direction}")]
+        public async Task<HttpResponseMessage> Get(int pageNumber, int pageSize, string criterion, string direction)
         {
-            var documents = await documentService.GetDocumentsInPagedList(pageNumber, pageSize);
+            var documents = await documentService.GetDocumentsInPagedList(pageNumber, pageSize, criterion, direction);
 
             if (documents.Items != null)
             {

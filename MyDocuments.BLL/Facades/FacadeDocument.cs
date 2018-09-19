@@ -24,9 +24,15 @@ namespace MyDocuments.BLL.Facades
             return MapService.ToListDto(documents);
 
         }
-        public async Task<PagedListDocumentDTO> GetDocumentsInPagedListAsync(int pageNumber, int pageSize)
+        public async Task<PagedListDocumentDTO> GetDocumentsInPagedListAsync(int pageNumber, int pageSize, string criterion, string direction)
         {
-            var documents = await UoW.Documents.GetPagedList();
+            var documents = await UoW.Documents.GetPagedList(criterion,direction);
+
+            //if (!string.IsNullOrEmpty(searchValue))
+            //{
+            //    documents = documents.Where(a => a.Name.Contains(searchValue) || a.Description.Contains(searchValue) || a.Author.Contains(searchValue));
+            //}
+
             var pagedListDocumentDto = new PagedListDocumentDTO();
             pagedListDocumentDto.PageSize = pageSize;
             pagedListDocumentDto.TotalCount = documents.Count();

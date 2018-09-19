@@ -14,6 +14,6 @@ namespace MyDocuments.Services.Interfaces
         Task RemoveDocumentById(int id);
         Task<DocumentDTO> AddDocument(DocumentDTO documentDTO);
         Task<DocumentDTO> UpdateDocumentById(int id, DocumentDTO dto);
-        Task<PagedListDocumentDTO> GetDocumentsInPagedList(int pageNumber, int pageSize);
+        Task<PagedListDocumentDTO> GetDocumentsInPagedList(int pageNumber, int pageSize, string criterion, string direction);
     }
 }
