@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyDocuments.BLL.DTO;
-
 using MyDocuments.DAL.Entities;
 using MyDocuments.BLL.Map;
+using System.Runtime.Serialization;
+using MyDocuments.PL.Filters;
 
 namespace MyDocuments.BLL.Facades
 {
@@ -29,22 +30,39 @@ namespace MyDocuments.BLL.Facades
             return MapService.ToListDto(documents);
 
         }
-        public async Task<PagedListDocumentDTO> GetDocumentsInPagedListAsync(int pageNumber, int pageSize, string criterion, string direction)
+        public async Task<PagedListDocumentDTO> GetDocumentsInPagedListAsync(int pageNumber, int pageSize, string criterion, string direction, string searchValue)
         {
-            if (!(direction == Direction.asc.ToString() || direction == Direction.desc.ToString()))
+            if (direction != Direction.desc.ToString())
             {
                 direction = "asc";
             }
-            var documents = await UoW.Documents.GetPagedList(criterion, direction);
+         
             var pagedListDocumentDto = new PagedListDocumentDTO();
+            var documents = await UoW.Documents.GetPagedList(criterion, direction);
+
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                documents = documents.Where(a => a.Name.Contains(searchValue) || a.Description.Contains(searchValue) || a.Author.Contains(searchValue));
+                              
+            }
+
             pagedListDocumentDto.PageSize = pageSize;
             pagedListDocumentDto.TotalCount = documents.Count();
             pagedListDocumentDto.NumberOfPages = (int)Math.Ceiling(pagedListDocumentDto.TotalCount / (double)pagedListDocumentDto.PageSize);
+
             if (pageNumber > pagedListDocumentDto.NumberOfPages || pageNumber < 0)
             {
-                return pagedListDocumentDto;
+                if (pagedListDocumentDto.TotalCount == 0)
+                {
+                    throw new NoDocumentsException($"Page number should be 0 with PageSize = {pagedListDocumentDto.PageSize} ");
+                   
+                }
+                else
+
+                throw new Exception($"Page number should be between 0 and {pagedListDocumentDto.NumberOfPages} with PageSize = {pagedListDocumentDto.PageSize} ");               
             }
-            pagedListDocumentDto.PageNumber = pageNumber;
+
+            pagedListDocumentDto.PageNumber = pageNumber;         
             var pagedListEntities = documents.Skip((pagedListDocumentDto.PageNumber) * pagedListDocumentDto.PageSize).Take(pagedListDocumentDto.PageSize).ToList();
             pagedListDocumentDto = MapService.ToPagedListDto(pagedListDocumentDto, pagedListEntities);
 
@@ -94,4 +112,6 @@ namespace MyDocuments.BLL.Facades
 
 
     }
+
+
 }

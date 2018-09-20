@@ -27,10 +27,10 @@ namespace MyDocuments.Services.Services
         }
 
 
-        public async Task<PagedListDocumentDTO> GetDocumentsInPagedList(int pageNumber, int pageSize, string criterion, string direction)
+        public async Task<PagedListDocumentDTO> GetDocumentsInPagedList(int pageNumber, int pageSize, string criterion, string direction, string searchValue)
         {
             if (pageSize < 0) throw new Exception("Page size should more than 0");
-            var documents = await facadeDocument.GetDocumentsInPagedListAsync(pageNumber, pageSize, criterion, direction);
+            var documents = await facadeDocument.GetDocumentsInPagedListAsync(pageNumber, pageSize, criterion, direction, searchValue);
             return documents;
         }
 

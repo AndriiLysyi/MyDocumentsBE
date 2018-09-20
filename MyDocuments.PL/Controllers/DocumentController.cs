@@ -19,6 +19,13 @@ namespace MyDocuments.PL.Controllers
             this.documentService = serv;
         }
 
+        public class PostDocumentsParams
+        {
+            public string criterion { get; set; }
+            public string direction { get; set; }
+            public string searchValue { get; set; }
+        }
+
         [HttpGet]
         public async Task<HttpResponseMessage> Get()
         {
@@ -33,20 +40,13 @@ namespace MyDocuments.PL.Controllers
         }
 
 
-        [HttpGet]
- 
-        [Route("{pageNumber:int}/{pageSize:int}/{criterion}/{direction}")]
-        public async Task<HttpResponseMessage> Get(int pageNumber, int pageSize, string criterion, string direction)
+        [HttpPost]
+        [Route("{pageNumber:int}/{pageSize:int}")]
+        public async Task<HttpResponseMessage> Get(int pageNumber, int pageSize, [FromBody] PostDocumentsParams postDocumentsParams)
         {
-            var documents = await documentService.GetDocumentsInPagedList(pageNumber, pageSize, criterion, direction);
+            var documents = await documentService.GetDocumentsInPagedList(pageNumber, pageSize, postDocumentsParams.criterion, postDocumentsParams.direction, postDocumentsParams.searchValue);
 
-            if (documents.Items != null)
-            {
-                return Request.CreateResponse<PagedListDocumentDTO>(HttpStatusCode.OK, documents);
-            }
-            string message = $"PageNumber  should between 0 and {documents.NumberOfPages} with PageSize = {documents.PageSize} ";
-
-            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, message);
+            return Request.CreateResponse(HttpStatusCode.OK, documents);
         }
 
         [HttpGet]

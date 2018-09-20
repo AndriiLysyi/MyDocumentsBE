@@ -22,7 +22,15 @@ namespace MyDocuments.PL.Filters
             }
             else
             {
-                if (context.Exception is Exception)
+                if (context.Exception is NoDocumentsException)
+                {
+                    context.Response = new HttpResponseMessage(HttpStatusCode.NoContent)
+                    {
+                        Content = new StringContent(context.Exception.Message)
+                    };
+                }
+                else
+                    if (context.Exception is Exception)
                 {
                     context.Response = new HttpResponseMessage(HttpStatusCode.BadRequest)
                     {
