@@ -33,8 +33,6 @@ namespace MyDocuments.Services.Services
             var documents = await facadeDocument.GetDocumentsInPagedListAsync(pageNumber, pageSize, criterion, direction, searchValue);
             return documents;
         }
-
-
         public async Task<DocumentDTO> GetDocumentById(int id)
         {
             if (id <= 0) throw new Exception("Id should be more than 0");

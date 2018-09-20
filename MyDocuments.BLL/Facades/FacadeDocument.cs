@@ -12,7 +12,7 @@ using MyDocuments.PL.Filters;
 
 namespace MyDocuments.BLL.Facades
 {
-    public class FacadeDocument: BaseFacade
+    public class FacadeDocument : BaseFacade
     {
         public enum Direction
         {
@@ -36,14 +36,18 @@ namespace MyDocuments.BLL.Facades
             {
                 direction = "asc";
             }
-         
+
             var pagedListDocumentDto = new PagedListDocumentDTO();
             var documents = await UoW.Documents.GetPagedList(criterion, direction);
 
             if (!string.IsNullOrEmpty(searchValue))
             {
-                documents = documents.Where(a => a.Name.Contains(searchValue) || a.Description.Contains(searchValue) || a.Author.Contains(searchValue));
-                              
+                var searchList = searchValue.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach( var sord in searchList)
+                {
+                    documents = documents.Where(a => a.Name.Contains(searchValue) || a.Description.Contains(searchValue) || a.Author.Contains(searchValue));
+                }
+                
             }
 
             pagedListDocumentDto.PageSize = pageSize;
@@ -54,18 +58,16 @@ namespace MyDocuments.BLL.Facades
             {
                 if (pagedListDocumentDto.TotalCount == 0)
                 {
-                    throw new NoDocumentsException($"Page number should be 0 with PageSize = {pagedListDocumentDto.PageSize} ");
-                   
+                    throw new NoDocumentsException("Page number should be 0 with PageSize = '{0}'", pagedListDocumentDto.PageSize);
                 }
                 else
-
-                throw new Exception($"Page number should be between 0 and {pagedListDocumentDto.NumberOfPages} with PageSize = {pagedListDocumentDto.PageSize} ");               
+                    throw new NoDocumentsException("Page number should be between 0 and '{0}' with PageSize = '{1}'", pagedListDocumentDto.NumberOfPages, pagedListDocumentDto.PageSize);
             }
 
-            pagedListDocumentDto.PageNumber = pageNumber;         
+            pagedListDocumentDto.PageNumber = pageNumber;
             var pagedListEntities = documents.Skip((pagedListDocumentDto.PageNumber) * pagedListDocumentDto.PageSize).Take(pagedListDocumentDto.PageSize).ToList();
-            pagedListDocumentDto = MapService.ToPagedListDto(pagedListDocumentDto, pagedListEntities);
 
+            pagedListDocumentDto = MapService.ToPagedListDto(pagedListDocumentDto, pagedListEntities);
             return pagedListDocumentDto;
         }
 
