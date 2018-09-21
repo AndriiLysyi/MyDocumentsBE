@@ -40,14 +40,15 @@ namespace MyDocuments.BLL.Facades
             var pagedListDocumentDto = new PagedListDocumentDTO();
             var documents = await UoW.Documents.GetPagedList(criterion, direction);
 
+            List<Document> result = new List<Document>();
+
             if (!string.IsNullOrEmpty(searchValue))
             {
                 var searchList = searchValue.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                foreach( var sord in searchList)
-                {
-                    documents = documents.Where(a => a.Name.Contains(searchValue) || a.Description.Contains(searchValue) || a.Author.Contains(searchValue));
-                }
-                
+
+                documents = documents.Where(p => !searchList.Any(val =>  p.Description.Contains(val))).Where(p => searchList.Any(val => p.Name.Contains(val) && p.Author.Contains(val) ));
+
+
             }
 
             pagedListDocumentDto.PageSize = pageSize;
