@@ -9,6 +9,7 @@ using MyDocuments.DAL.Entities;
 using MyDocuments.BLL.Map;
 using System.Runtime.Serialization;
 using MyDocuments.PL.Filters;
+using MyDocuments.PL.Models;
 
 namespace MyDocuments.BLL.Facades
 {
@@ -19,6 +20,7 @@ namespace MyDocuments.BLL.Facades
             asc,
             desc
         }
+
         public FacadeDocument(IUnitOfWork uow) : base(uow)
         {
         }
@@ -30,32 +32,48 @@ namespace MyDocuments.BLL.Facades
             return MapService.ToListDto(documents);
 
         }
-        public async Task<PagedListDocumentDTO> GetDocumentsInPagedListAsync(int pageNumber, int pageSize, string criterion, string direction, string searchValue)
+
+        public async Task<PagedListDocumentDTO> GetDocumentsByParameters(DocumentsParameters documentsParameters)
         {
-            if (direction != Direction.desc.ToString())
+            if (documentsParameters.direction != Direction.desc.ToString())
             {
-                direction = "asc";
+                documentsParameters.direction = "asc";
             }
 
             var pagedListDocumentDto = new PagedListDocumentDTO();
-            var documents = await UoW.Documents.GetPagedList(criterion, direction);
+            var documents = await UoW.Documents.GetPagedList(documentsParameters.criterion, documentsParameters.direction);
 
             List<Document> result = new List<Document>();
 
-            if (!string.IsNullOrEmpty(searchValue))
-            {
-                var searchList = searchValue.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            //if (!string.IsNullOrEmpty(documentsParameters.searchValue))
+            //{
+            //    string  [] separator = { " " };
+            //    List<string> elementsNot = new List<string>();
+            //    List<string> elementsAnd = new List<string>();
 
-                documents = documents.Where(p => !searchList.Any(val =>  p.Description.Contains(val))).Where(p => searchList.Any(val => p.Name.Contains(val) && p.Author.Contains(val) ));
+            //    string [] searchList = documentsParameters.searchValue.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+            //    for (int i = 0; i < searchList.Length; i++)
+            //    {
+            //        if (searchList[i] == "not")
+            //        {
+            //            elementsNot.Add(searchList[i+1]);
+            //        }
 
+            //        if (searchList[i] == "and")
+            //        {
+            //            elementsAnd.Add(searchList[i - 1]);
+            //            elementsAnd.Add(searchList[i + 1]);
+            //        }
+            //    }
+            //    documents = documents.Where(p => !elementsNot.Any(val => p.Name.Contains(val) || p.Description.Contains(val) || p.Author.Contains(val)))
+            //        .Where(p => !elementsAnd.Any(val => p.Name.Contains(val) && p.Description.Contains(val) && p.Author.Contains(val)));
+            //}
 
-            }
-
-            pagedListDocumentDto.PageSize = pageSize;
+            pagedListDocumentDto.PageSize = documentsParameters.pageSize;
             pagedListDocumentDto.TotalCount = documents.Count();
             pagedListDocumentDto.NumberOfPages = (int)Math.Ceiling(pagedListDocumentDto.TotalCount / (double)pagedListDocumentDto.PageSize);
 
-            if (pageNumber > pagedListDocumentDto.NumberOfPages || pageNumber < 0)
+            if (documentsParameters.pageNumber > pagedListDocumentDto.NumberOfPages || documentsParameters.pageNumber < 0)
             {
                 if (pagedListDocumentDto.TotalCount == 0)
                 {
@@ -65,7 +83,7 @@ namespace MyDocuments.BLL.Facades
                     throw new NoDocumentsException("Page number should be between 0 and '{0}' with PageSize = '{1}'", pagedListDocumentDto.NumberOfPages, pagedListDocumentDto.PageSize);
             }
 
-            pagedListDocumentDto.PageNumber = pageNumber;
+            pagedListDocumentDto.PageNumber = documentsParameters.pageNumber;
             var pagedListEntities = documents.Skip((pagedListDocumentDto.PageNumber) * pagedListDocumentDto.PageSize).Take(pagedListDocumentDto.PageSize).ToList();
 
             pagedListDocumentDto = MapService.ToPagedListDto(pagedListDocumentDto, pagedListEntities);
@@ -79,17 +97,21 @@ namespace MyDocuments.BLL.Facades
             return MapService.ToDto(document);
         }
 
-        public async Task RemoveDocumentById(int id)
+        public async Task RemoveDocumentById(int [] documentId)
         {
-            var document = await UoW.Documents.Get(id);
-            if (document == null)
+            foreach (var id in documentId)
             {
-                throw new Exception($"There isn't document with id = {id}");
-            }
-
-            UoW.Documents.Remove(document);
+                var document = await UoW.Documents.Get(id);
+                if (document == null)
+                {
+                    throw new NotFoundDocumentException("There isn't document with id = {0}",id);                        
+                }
+                UoW.Documents.Remove(document);
+            }       
+            
             await UoW.Documents.SaveAsync();
         }
+
         public async Task<DocumentDTO> AddDocumentAsync(DocumentDTO documentDTO)
         {
             documentDTO.CreateDate = DateTime.UtcNow;
@@ -98,12 +120,13 @@ namespace MyDocuments.BLL.Facades
             await UoW.Documents.SaveAsync();
             return MapService.ToDto(document); 
         }
+
         public async Task<DocumentDTO> UpdateDocumentAsync(int id, DocumentDTO documentDTO)
         {
             var document = await UoW.Documents.Get(id);
             if (document == null)
             {
-                throw new Exception($"There isn't document with id = {id}");
+                throw new NotFoundDocumentException("There isn't document with id = {0}", id);
             }
             documentDTO.ModifiedDate = DateTime.UtcNow;
 
@@ -112,9 +135,5 @@ namespace MyDocuments.BLL.Facades
             return MapService.ToDto(document);
         }
 
-
-
     }
-
-
 }

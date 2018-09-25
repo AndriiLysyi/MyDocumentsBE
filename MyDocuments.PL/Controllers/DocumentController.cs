@@ -1,4 +1,5 @@
 ﻿using MyDocuments.BLL.DTO;
+using MyDocuments.PL.Models;
 using MyDocuments.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -19,12 +20,7 @@ namespace MyDocuments.PL.Controllers
             this.documentService = serv;
         }
 
-        public class PostDocumentsParams
-        {
-            public string criterion { get; set; }
-            public string direction { get; set; }
-            public string searchValue { get; set; }
-        }
+     
 
         [HttpGet]
         public async Task<HttpResponseMessage> Get()
@@ -41,10 +37,10 @@ namespace MyDocuments.PL.Controllers
 
 
         [HttpPost]
-        [Route("{pageNumber:int}/{pageSize:int}")]
-        public async Task<HttpResponseMessage> Get(int pageNumber, int pageSize, [FromBody] PostDocumentsParams postDocumentsParams)
+        [Route("getDocuments")]
+        public async Task<HttpResponseMessage> GetDocumentsByParameters( [FromBody] DocumentsParameters documentsParameters)
         {
-            var documents = await documentService.GetDocumentsInPagedList(pageNumber, pageSize, postDocumentsParams.criterion, postDocumentsParams.direction, postDocumentsParams.searchValue);
+            var documents = await documentService.GetDocumentsByParameters( documentsParameters);
 
             return Request.CreateResponse(HttpStatusCode.OK, documents);
         }
@@ -66,13 +62,36 @@ namespace MyDocuments.PL.Controllers
         {
            var document = await documentService.AddDocument(documentDTO);
             if (document != null)
-            {
-               
+            {               
                 return Request.CreateResponse(HttpStatusCode.Created, document);
             }
             var message = $"Can`t create document ";
             return Request.CreateErrorResponse(HttpStatusCode.BadRequest, message);
         }
+
+        [HttpPost]
+        public async Task<HttpResponseMessage> UploadFile([FromBody]DocumentDTO documentDTO)
+        {
+            var httpRequest = HttpContext.Current.Request;
+            if (httpRequest.Files.Count > 0)
+            {
+                foreach (string file in httpRequest.Files)
+                {
+                    var document = await documentService.AddDocument(documentDTO);
+                    if (document != null)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.Created, document);
+                    }
+                    var postedFile = httpRequest.Files[file];
+                    var filePath = HttpContext.Current.Server.MapPath("~/UploadFile/" + postedFile.FileName);
+                    postedFile.SaveAs(filePath);
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, "Succesfully uploaded file");
+            }
+            string message = $"Can`t create document ";
+            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, message);
+        }
+
 
         [HttpPut]
         [Route("{id}")]
@@ -81,7 +100,6 @@ namespace MyDocuments.PL.Controllers
             var document = await documentService.UpdateDocumentById(id, documentDTO);
             if (document != null)
             {
-
                 return Request.CreateResponse(HttpStatusCode.OK, document);
             }
             var message = $"Can`t update document with id = {id} ";
@@ -90,12 +108,11 @@ namespace MyDocuments.PL.Controllers
 
 
         [HttpDelete]
-        [Route("{id}")]
-        public async Task<HttpResponseMessage> Delete(int id)
+        public async Task<HttpResponseMessage> Delete([FromBody] int[] documentId)
         {
-            await documentService.RemoveDocumentById(id);
+            await documentService.RemoveDocumentById(documentId);
 
-            return Request.CreateResponse(HttpStatusCode.OK, $"Succesfully deleted document id: {id}.");
+            return Request.CreateResponse(HttpStatusCode.OK, $"Succesfully deleted array of documents .");
         }
     }
 }

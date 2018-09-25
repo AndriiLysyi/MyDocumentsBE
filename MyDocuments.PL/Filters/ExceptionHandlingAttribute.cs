@@ -7,12 +7,13 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Filters;
 
+
 namespace MyDocuments.PL.Filters
 {
     public class ExceptionHandlingAttribute : ExceptionFilterAttribute
     {
         public override void OnException(HttpActionExecutedContext context)
-        {            
+        {
             if (context.Exception is NotImplementedException)
             {
                 context.Response = new HttpResponseMessage(HttpStatusCode.NotImplemented)
@@ -22,33 +23,44 @@ namespace MyDocuments.PL.Filters
             }
             else
             {
-                if (context.Exception is NoDocumentsException)
+                if (context.Exception is NotFoundDocumentException)
                 {
-                    context.Response = new HttpResponseMessage(HttpStatusCode.NoContent)
-                    {
-                        Content = new StringContent(context.Exception.Message)
-                    };
-                }
-                else
-                    if (context.Exception is Exception)
-                {
-                    context.Response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    context.Response = new HttpResponseMessage(HttpStatusCode.NotFound)
                     {
                         Content = new StringContent(context.Exception.Message)
                     };
                 }
                 else
                 {
-                    context.Response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                    if (context.Exception is NoDocumentsException)
                     {
-                        Content = new StringContent("An error occurred, please try again or contact the administrator."),
-                        ReasonPhrase = "Critical Exception"
-                    };
+                        context.Response = new HttpResponseMessage(HttpStatusCode.NoContent)
+                        {
+                            Content = new StringContent(context.Exception.Message)
+                        };
+                    }
+                    else
+                        if (context.Exception is Exception)
+                    {
+                        context.Response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                        {
+                            Content = new StringContent(context.Exception.Message)
+                        };
+                    }
+                    else
+                    {
+                        context.Response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                        {
+                            Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                            ReasonPhrase = "Critical Exception"
+                        };
+                    }
                 }
             }
-            
 
 
         }
     }
+
+
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyDocuments.BLL.DTO;
+using MyDocuments.BLL;
+using MyDocuments.PL.Models;
 
 namespace MyDocuments.Services.Interfaces
 {
@@ -11,9 +13,10 @@ namespace MyDocuments.Services.Interfaces
     {
         Task<List<DocumentDTO>> GetAllDocuments();
         Task<DocumentDTO> GetDocumentById(int id);
-        Task RemoveDocumentById(int id);
+        Task RemoveDocumentById(int [] documentId);
         Task<DocumentDTO> AddDocument(DocumentDTO documentDTO);
         Task<DocumentDTO> UpdateDocumentById(int id, DocumentDTO dto);
-        Task<PagedListDocumentDTO> GetDocumentsInPagedList(int pageNumber, int pageSize, string criterion, string direction, string searchValue);
+        Task<PagedListDocumentDTO> GetDocumentsByParameters(DocumentsParameters documentsParameters);
+           // int pageNumber, int pageSize, string criterion, string direction, string searchValue);
     }
 }
