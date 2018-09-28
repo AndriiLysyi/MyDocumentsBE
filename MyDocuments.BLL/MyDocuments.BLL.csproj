@@ -49,7 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DocumentsParameters.cs" />
+    <Compile Include="DTO\DocumentsParameters.cs" />
     <Compile Include="DTO\PagedListDocumentDTO.cs" />
     <Compile Include="Facades\BaseFacade.cs" />
     <Compile Include="DTO\DocumentDTO.cs" />

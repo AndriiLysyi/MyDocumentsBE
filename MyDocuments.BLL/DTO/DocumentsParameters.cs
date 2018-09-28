@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MyDocuments.PL.Models
+namespace MyDocuments.BLL.DTO
 {
     public class DocumentsParameters
     {

@@ -9,7 +9,6 @@ using MyDocuments.DAL.Entities;
 using MyDocuments.BLL.Map;
 using System.Runtime.Serialization;
 using MyDocuments.PL.Filters;
-using MyDocuments.PL.Models;
 
 namespace MyDocuments.BLL.Facades
 {

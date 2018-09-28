@@ -20,7 +20,7 @@ namespace MyDocuments.PL
             string url = ConfigurationManager.AppSettings["ApiUrl"];
             config.EnableCors(new EnableCorsAttribute(url, headers: "*", methods: "*"));
 
-            config.Filters.Add(new ValidateModelAttribute());
+          //  config.Filters.Add(new ValidateModelAttribute());
             config.Filters.Add(new ExceptionHandlingAttribute());
             config.Services.Replace(typeof(IExceptionLogger), new UnhandledExceptionLogger());
             // Web API routes

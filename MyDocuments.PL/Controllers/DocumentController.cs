@@ -1,5 +1,4 @@
 ﻿using MyDocuments.BLL.DTO;
-using MyDocuments.PL.Models;
 using MyDocuments.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -70,18 +69,19 @@ namespace MyDocuments.PL.Controllers
         }
 
         [HttpPost]
-        public async Task<HttpResponseMessage> UploadFile([FromBody]DocumentDTO documentDTO)
+        [Route("upload")]
+        public async Task<HttpResponseMessage> UploadFile()//[FromBody]DocumentDTO documentDTO)
         {
             var httpRequest = HttpContext.Current.Request;
             if (httpRequest.Files.Count > 0)
             {
                 foreach (string file in httpRequest.Files)
                 {
-                    var document = await documentService.AddDocument(documentDTO);
-                    if (document != null)
-                    {
-                        return Request.CreateResponse(HttpStatusCode.Created, document);
-                    }
+                    //var document = await documentService.AddDocument(documentDTO);
+                    //if (document != null)
+                    //{
+                    //    return Request.CreateResponse(HttpStatusCode.Created, document);
+                    //}
                     var postedFile = httpRequest.Files[file];
                     var filePath = HttpContext.Current.Server.MapPath("~/UploadFile/" + postedFile.FileName);
                     postedFile.SaveAs(filePath);
