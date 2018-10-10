@@ -9,6 +9,7 @@ using MyDocuments.DAL.Entities;
 using MyDocuments.BLL.Map;
 using System.Runtime.Serialization;
 using MyDocuments.PL.Filters;
+using System.Linq.Expressions;
 
 namespace MyDocuments.BLL.Facades
 {
@@ -68,6 +69,7 @@ namespace MyDocuments.BLL.Facades
             //        .Where(p => !elementsAnd.Any(val => p.Name.Contains(val) && p.Description.Contains(val) && p.Author.Contains(val)));
             //}
 
+
             pagedListDocumentDto.PageSize = documentsParameters.pageSize;
             pagedListDocumentDto.TotalCount = documents.Count();
             pagedListDocumentDto.NumberOfPages = (int)Math.Ceiling(pagedListDocumentDto.TotalCount / (double)pagedListDocumentDto.PageSize);
@@ -89,7 +91,70 @@ namespace MyDocuments.BLL.Facades
             return pagedListDocumentDto;
         }
 
-        public async Task<DocumentDTO> GetDocumentByIdAsync(int id)
+
+        public async Task<PagedListDocumentWithMessageDTO> GetDocumentsByStrangeParameters(DocumentsParameters documentsParameters, Expression<Func<MyDocuments.DAL.Entities.Document, bool>> expression)
+        {
+            if (documentsParameters.direction != Direction.desc.ToString())
+            {
+                documentsParameters.direction = "asc";
+            }
+            var documents = await UoW.Documents.GetPagedList(documentsParameters.criterion, documentsParameters.direction);
+
+            var pagedListDocumentDto = new PagedListDocumentWithMessageDTO();
+            List<Document> result = new List<Document>();
+
+            if (expression != null)
+            {
+                documents = documents.Where(expression);
+            }
+
+            //if (!string.IsNullOrEmpty(documentsParameters.searchValue.Trim()))
+            //{
+            //    string[] separator = { " " };
+            //    List<string> elementsNot = new List<string>();
+            //    List<string> elementsAnd = new List<string>();
+
+            //    string[] searchList = documentsParameters.searchValue.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+            //    for (int i = 0; i < searchList.Length; i++)
+            //    {
+            //        if (searchList[i] == "not")
+            //        {
+            //            elementsNot.Add(searchList[i + 1]);
+            //        }
+
+            //        if (searchList[i] == "and")
+            //        {
+            //            elementsAnd.Add(searchList[i - 1]);
+            //            elementsAnd.Add(searchList[i + 1]);
+            //        }
+            //    }
+            //    documents = documents.Where(p => !elementsNot.Any(val => p.Name.Contains(val) || p.Description.Contains(val) || p.Author.Contains(val)))
+            //        .Where(p => !elementsAnd.Any(val => p.Name.Contains(val) && p.Description.Contains(val) && p.Author.Contains(val)));
+            //}
+
+
+            pagedListDocumentDto.PageSize = documentsParameters.pageSize;
+            pagedListDocumentDto.TotalCount = documents.Count();
+            pagedListDocumentDto.NumberOfPages = (int)Math.Ceiling(pagedListDocumentDto.TotalCount / (double)pagedListDocumentDto.PageSize);
+
+            if (documentsParameters.pageNumber > pagedListDocumentDto.NumberOfPages || documentsParameters.pageNumber < 0)
+            {
+                if (pagedListDocumentDto.TotalCount == 0)
+                {
+                    throw new NoDocumentsException("Page number should be 0 with PageSize = '{0}'", pagedListDocumentDto.PageSize);
+                }
+                else
+                    throw new NoDocumentsException("Page number should be between 0 and '{0}' with PageSize = '{1}'", pagedListDocumentDto.NumberOfPages, pagedListDocumentDto.PageSize);
+            }
+
+            pagedListDocumentDto.PageNumber = documentsParameters.pageNumber;
+            var pagedListEntities = documents.Skip((pagedListDocumentDto.PageNumber) * pagedListDocumentDto.PageSize).Take(pagedListDocumentDto.PageSize).ToList();
+
+            pagedListDocumentDto = MapService.ToPagedListDocumentWithMessageDto(pagedListDocumentDto, pagedListEntities);
+            return pagedListDocumentDto;
+        }
+
+            public async Task<DocumentDTO> GetDocumentByIdAsync(int id)
         {
             var document = await UoW.Documents.Get(id);
 

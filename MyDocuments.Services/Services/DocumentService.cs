@@ -28,8 +28,39 @@ namespace MyDocuments.Services.Services
 
         public async Task<PagedListDocumentDTO> GetDocumentsByParameters( DocumentsParameters documentsParameters)
         {
+
             if (documentsParameters.pageSize < 0) throw new Exception("Page size should more than 0");
             var documents = await facadeDocument.GetDocumentsByParameters(documentsParameters);
+            return documents;
+        }
+        public async Task<PagedListDocumentWithMessageDTO> GetDocumentsByStrangeParameters(DocumentsParameters documentsParameters)
+        {
+           
+
+
+
+            if (documentsParameters.pageSize < 0) throw new Exception("Page size should more than 0");
+            PagedListDocumentWithMessageDTO documents;
+            if (string.IsNullOrEmpty(documentsParameters.searchValue.Trim()))
+            {
+                 documents = await facadeDocument.GetDocumentsByStrangeParameters(documentsParameters, null);
+            }
+            else
+            {
+                //TODO: DELETE
+                SearchPredicateService predicateService = new SearchPredicateService();
+               
+                var expression = predicateService.getExpression(documentsParameters.searchValue.Trim(), out string message);
+                ///
+                 
+                  documents = await facadeDocument.GetDocumentsByStrangeParameters(documentsParameters, expression);
+                if (!string.IsNullOrEmpty(message))
+                {
+                    documents.Message = message;
+                }
+
+            }
+
             return documents;
         }
 

@@ -16,6 +16,7 @@ namespace MyDocuments.Services.Interfaces
         Task<DocumentDTO> AddDocument(DocumentDTO documentDTO);
         Task<DocumentDTO> UpdateDocumentById(int id, DocumentDTO dto);
         Task<PagedListDocumentDTO> GetDocumentsByParameters(DocumentsParameters documentsParameters);
-           // int pageNumber, int pageSize, string criterion, string direction, string searchValue);
+        Task<PagedListDocumentWithMessageDTO> GetDocumentsByStrangeParameters(DocumentsParameters documentsParameters);
+        // int pageNumber, int pageSize, string criterion, string direction, string searchValue);
     }
 }

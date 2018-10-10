@@ -37,9 +37,18 @@ namespace MyDocuments.PL.Controllers
 
         [HttpPost]
         [Route("getDocuments")]
-        public async Task<HttpResponseMessage> GetDocumentsByParameters( [FromBody] DocumentsParameters documentsParameters)
+        public async Task<HttpResponseMessage> GetDocumentsByParameters([FromBody] DocumentsParameters documentsParameters)
         {
             var documents = await documentService.GetDocumentsByParameters( documentsParameters);
+
+            return Request.CreateResponse(HttpStatusCode.OK, documents);
+        }
+
+        [HttpPost]
+        [Route("search")]
+        public async Task<HttpResponseMessage> GetDocumentsByParametersForSearch([FromBody] DocumentsParameters documentsParameters)
+        {
+            var documents = await documentService.GetDocumentsByStrangeParameters(documentsParameters);
 
             return Request.CreateResponse(HttpStatusCode.OK, documents);
         }

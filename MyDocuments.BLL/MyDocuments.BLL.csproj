@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="DTO\DocumentsParameters.cs" />
     <Compile Include="DTO\PagedListDocumentDTO.cs" />
+    <Compile Include="DTO\PagedListDocumentWithMessageDTO.cs" />
     <Compile Include="Facades\BaseFacade.cs" />
     <Compile Include="DTO\DocumentDTO.cs" />
     <Compile Include="DTO\ValidationRules.cs" />

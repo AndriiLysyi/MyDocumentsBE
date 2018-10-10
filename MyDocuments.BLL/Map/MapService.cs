@@ -16,9 +16,9 @@ namespace MyDocuments.BLL.Map
             return Mapper.Map<List<Document>, List<DocumentDTO>>(documents);
         }
 
-        public static  List<Document> ToListEntity(List<DocumentDTO> documentsDTO)
+        public static List<Document> ToListEntity(List<DocumentDTO> documentsDTO)
         {
-            return Mapper.Map< List<DocumentDTO>, List<Document>>(documentsDTO);
+            return Mapper.Map<List<DocumentDTO>, List<Document>>(documentsDTO);
         }
 
         public static DocumentDTO ToDto(Document documents)
@@ -27,15 +27,15 @@ namespace MyDocuments.BLL.Map
         }
         public static Document ToEntity(DocumentDTO documentsDTO)
         {
-            return Mapper.Map< DocumentDTO, Document >(documentsDTO);
+            return Mapper.Map<DocumentDTO, Document>(documentsDTO);
         }
         public static Document ToEntityForUpdate(DocumentDTO documentDTO, Document document)
         {
             documentDTO.Id = document.Id;
             documentDTO.CreateDate = document.CreateDate;
-            return  Mapper.Map<DocumentDTO, Document>(documentDTO, document);
+            return Mapper.Map<DocumentDTO, Document>(documentDTO, document);
         }
-        public static PagedListDocumentDTO ToPagedListDto(PagedListDocumentDTO pagedListDocumentDTO, List<Document>  documents)
+        public static PagedListDocumentDTO ToPagedListDto(PagedListDocumentDTO pagedListDocumentDTO, List<Document> documents)
         {
             if (pagedListDocumentDTO.PageNumber > 0)
             {
@@ -49,5 +49,18 @@ namespace MyDocuments.BLL.Map
             return pagedListDocumentDTO;
         }
 
+        public static PagedListDocumentWithMessageDTO ToPagedListDocumentWithMessageDto(PagedListDocumentWithMessageDTO pagedListDocumentDTO, List<Document> documents)
+        {
+            if (pagedListDocumentDTO.PageNumber > 0)
+            {
+                pagedListDocumentDTO.HasPrevious = true;
+            }
+            if (pagedListDocumentDTO.PageNumber < pagedListDocumentDTO.NumberOfPages)
+            {
+                pagedListDocumentDTO.HasNext = true;
+            }
+            pagedListDocumentDTO.Items = ToListDto(documents);
+            return pagedListDocumentDTO;
+        }
     }
 }
