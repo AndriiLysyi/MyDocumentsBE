@@ -24,7 +24,11 @@ namespace MyDocuments.Services.Services
         }
         public async Task AddQueryToHistoryById(int id, string query)
         {
-            await facadeHistory.AddHistoryByUserIdAndQuery(id, query);
+            if ( !string.IsNullOrWhiteSpace(query))
+            {
+                await facadeHistory.AddHistoryByUserIdAndQuery(id, query);
+            }
+
         }
     }
 }

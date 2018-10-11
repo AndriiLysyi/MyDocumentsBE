@@ -46,7 +46,7 @@ namespace MyDocuments.PL.Controllers
             var userId = Request.Properties[HistoryHandler.userId];
             if (int.TryParse(userId.ToString(), out int id))
             {
-                historyService.AddQueryToHistoryById(id, documentsParameters.searchValue);
+               await historyService.AddQueryToHistoryById(id, documentsParameters.searchValue);
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, documents);
@@ -60,7 +60,7 @@ namespace MyDocuments.PL.Controllers
             var userId = Request.Properties[HistoryHandler.userId];
             if (int.TryParse(userId.ToString(), out int id))
             {
-                historyService.AddQueryToHistoryById(id, documentsParameters.searchValue);
+               await historyService.AddQueryToHistoryById(id, documentsParameters.searchValue);
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, documents);
