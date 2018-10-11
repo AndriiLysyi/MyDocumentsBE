@@ -1,4 +1,5 @@
 ﻿using MyDocuments.BLL.DTO;
+using MyDocuments.PL.Handlers;
 using MyDocuments.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,12 +15,14 @@ namespace MyDocuments.PL.Controllers
     public class DocumentController : ApiController
     {
         private readonly IDocumentService documentService;
-        public DocumentController(IDocumentService serv)
+        private readonly IHistoryService historyService;
+        public DocumentController(IDocumentService serv1, IHistoryService serv2)
         {
-            this.documentService = serv;
+            this.documentService = serv1;
+            this.historyService = serv2;
         }
 
-     
+
 
         [HttpGet]
         public async Task<HttpResponseMessage> Get()
@@ -39,7 +42,12 @@ namespace MyDocuments.PL.Controllers
         [Route("getDocuments")]
         public async Task<HttpResponseMessage> GetDocumentsByParameters([FromBody] DocumentsParameters documentsParameters)
         {
-            var documents = await documentService.GetDocumentsByParameters( documentsParameters);
+            var documents = await documentService.GetDocumentsByParameters(documentsParameters);
+            var userId = Request.Properties[HistoryHandler.userId];
+            if (int.TryParse(userId.ToString(), out int id))
+            {
+                historyService.AddQueryToHistoryById(id, documentsParameters.searchValue);
+            }
 
             return Request.CreateResponse(HttpStatusCode.OK, documents);
         }
@@ -49,6 +57,11 @@ namespace MyDocuments.PL.Controllers
         public async Task<HttpResponseMessage> GetDocumentsByParametersForSearch([FromBody] DocumentsParameters documentsParameters)
         {
             var documents = await documentService.GetDocumentsByStrangeParameters(documentsParameters);
+            var userId = Request.Properties[HistoryHandler.userId];
+            if (int.TryParse(userId.ToString(), out int id))
+            {
+                historyService.AddQueryToHistoryById(id, documentsParameters.searchValue);
+            }
 
             return Request.CreateResponse(HttpStatusCode.OK, documents);
         }
@@ -68,9 +81,9 @@ namespace MyDocuments.PL.Controllers
         [HttpPost]
         public async Task<HttpResponseMessage> Post([FromBody]DocumentDTO documentDTO)
         {
-           var document = await documentService.AddDocument(documentDTO);
+            var document = await documentService.AddDocument(documentDTO);
             if (document != null)
-            {               
+            {
                 return Request.CreateResponse(HttpStatusCode.Created, document);
             }
             var message = $"Can`t create document ";
@@ -101,17 +114,17 @@ namespace MyDocuments.PL.Controllers
             return Request.CreateErrorResponse(HttpStatusCode.BadRequest, message);
         }
 
-
         [HttpPut]
         [Route("{id}")]
-        public async Task<HttpResponseMessage> Put(int id, [FromBody]DocumentDTO documentDTO)
+        public async Task<HttpResponseMessage> Put([FromBody]DocumentDTO documentDTO)
         {
+            int id = documentDTO.Id;
             var document = await documentService.UpdateDocumentById(id, documentDTO);
             if (document != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, document);
             }
-            var message = $"Can`t update document with id = {id} ";
+            var message = $"Can`t update document with id = {documentDTO.Id} ";
             return Request.CreateErrorResponse(HttpStatusCode.BadRequest, message);
         }
 

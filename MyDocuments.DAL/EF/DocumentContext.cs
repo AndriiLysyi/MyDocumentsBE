@@ -7,7 +7,7 @@ namespace MyDocuments.DAL.EF
     public class DocumentContext : DbContext
     {
         public DbSet<Document> Documents { get; set; }
-
+        public DbSet<History> Histories { get; set; }
         static DocumentContext()
         {
             Database.SetInitializer<DocumentContext>(new DocumentDbInitializer());

@@ -15,6 +15,7 @@ namespace MyDocuments.PL.App_Start
             Mapper.Initialize((config) =>
             {
                 config.CreateMap<Document, DocumentDTO>().ReverseMap();
+                config.CreateMap<History, HistoryDTO>().ReverseMap();
             });
         }
     }

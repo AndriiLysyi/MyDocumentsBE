@@ -32,6 +32,7 @@ namespace MyDocuments.BLL.Map
         public static Document ToEntityForUpdate(DocumentDTO documentDTO, Document document)
         {
             documentDTO.Id = document.Id;
+            documentDTO.Type = document.Type;
             documentDTO.CreateDate = document.CreateDate;
             return Mapper.Map<DocumentDTO, Document>(documentDTO, document);
         }
@@ -62,5 +63,21 @@ namespace MyDocuments.BLL.Map
             pagedListDocumentDTO.Items = ToListDto(documents);
             return pagedListDocumentDTO;
         }
+
+        public static List<HistoryDTO> ToListHistoryDto(List<History> histories)
+        {
+            return Mapper.Map<List<History>, List<HistoryDTO>>(histories);
+        }
+        public static History ToHistoryEntity(HistoryDTO dto)
+        {
+            return Mapper.Map<HistoryDTO, History>(dto);
+        }
+        public static History ToHistoryEntityForUpdate(HistoryDTO dto, History history)
+        {
+            dto.Id = history.Id;
+            dto.CreateDate = DateTime.UtcNow;
+            return Mapper.Map<HistoryDTO, History>(dto, history);
+        }
+
     }
 }

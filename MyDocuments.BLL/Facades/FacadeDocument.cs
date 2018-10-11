@@ -108,31 +108,6 @@ namespace MyDocuments.BLL.Facades
                 documents = documents.Where(expression);
             }
 
-            //if (!string.IsNullOrEmpty(documentsParameters.searchValue.Trim()))
-            //{
-            //    string[] separator = { " " };
-            //    List<string> elementsNot = new List<string>();
-            //    List<string> elementsAnd = new List<string>();
-
-            //    string[] searchList = documentsParameters.searchValue.Split(separator, StringSplitOptions.RemoveEmptyEntries);
-            //    for (int i = 0; i < searchList.Length; i++)
-            //    {
-            //        if (searchList[i] == "not")
-            //        {
-            //            elementsNot.Add(searchList[i + 1]);
-            //        }
-
-            //        if (searchList[i] == "and")
-            //        {
-            //            elementsAnd.Add(searchList[i - 1]);
-            //            elementsAnd.Add(searchList[i + 1]);
-            //        }
-            //    }
-            //    documents = documents.Where(p => !elementsNot.Any(val => p.Name.Contains(val) || p.Description.Contains(val) || p.Author.Contains(val)))
-            //        .Where(p => !elementsAnd.Any(val => p.Name.Contains(val) && p.Description.Contains(val) && p.Author.Contains(val)));
-            //}
-
-
             pagedListDocumentDto.PageSize = documentsParameters.pageSize;
             pagedListDocumentDto.TotalCount = documents.Count();
             pagedListDocumentDto.NumberOfPages = (int)Math.Ceiling(pagedListDocumentDto.TotalCount / (double)pagedListDocumentDto.PageSize);
@@ -154,7 +129,7 @@ namespace MyDocuments.BLL.Facades
             return pagedListDocumentDto;
         }
 
-            public async Task<DocumentDTO> GetDocumentByIdAsync(int id)
+        public async Task<DocumentDTO> GetDocumentByIdAsync(int id)
         {
             var document = await UoW.Documents.Get(id);
 

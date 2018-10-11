@@ -5,11 +5,12 @@ using System;
 
 namespace MyDocuments.DAL.Repositories
 {
-    public class UnitOfWork: IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
-        private readonly DocumentContext  context;
+        private readonly DocumentContext context;
 
         private IDocumentRepository documentsRepository;
+        private IHistoryRepository historyRepository;
 
         public UnitOfWork(DocumentContext context)
         {
@@ -17,6 +18,7 @@ namespace MyDocuments.DAL.Repositories
         }
 
         public IDocumentRepository Documents => documentsRepository ?? (documentsRepository = new DocumentRepository(context));
+        public IHistoryRepository Histories => historyRepository ?? (historyRepository = new HistoryRepository(context));
 
         public async Task SaveChangesAsync()
         {
@@ -25,10 +27,10 @@ namespace MyDocuments.DAL.Repositories
 
         public void Dispose()
         {
-           if(this.context != null)
-           {
+            if (this.context != null)
+            {
                 context.Dispose();
-           }
+            }
         }
     }
 }

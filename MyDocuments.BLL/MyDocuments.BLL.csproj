@@ -50,12 +50,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTO\DocumentsParameters.cs" />
+    <Compile Include="DTO\HistoryDTO.cs" />
     <Compile Include="DTO\PagedListDocumentDTO.cs" />
     <Compile Include="DTO\PagedListDocumentWithMessageDTO.cs" />
     <Compile Include="Facades\BaseFacade.cs" />
     <Compile Include="DTO\DocumentDTO.cs" />
     <Compile Include="DTO\ValidationRules.cs" />
     <Compile Include="Facades\FacadeDocument.cs" />
+    <Compile Include="Facades\FacadeHistory.cs" />
     <Compile Include="Map\MapService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using MyDocuments.PL.Filters;
 using MyDocuments.PL.Logger;
+using MyDocuments.PL.Handlers;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -19,8 +20,8 @@ namespace MyDocuments.PL
 
             string url = ConfigurationManager.AppSettings["ApiUrl"];
             config.EnableCors(new EnableCorsAttribute(url, headers: "*", methods: "*"));
-
-          //  config.Filters.Add(new ValidateModelAttribute());
+            config.MessageHandlers.Add(new HistoryHandler());
+            //  config.Filters.Add(new ValidateModelAttribute());
             config.Filters.Add(new ExceptionHandlingAttribute());
             config.Services.Replace(typeof(IExceptionLogger), new UnhandledExceptionLogger());
             // Web API routes

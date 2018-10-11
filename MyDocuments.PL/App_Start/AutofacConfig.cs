@@ -27,8 +27,10 @@ namespace MyDocuments.PL.App_Start
             builder.RegisterWebApiModelBinderProvider();
             builder.RegisterType<DocumentContext>().AsSelf().InstancePerRequest().WithParameter("connectionString", "DocumentContext");
             builder.RegisterType<DocumentService>().As<IDocumentService>().InstancePerRequest();
+            builder.RegisterType<HistoryService>().As<IHistoryService>().InstancePerRequest();
            // builder.RegisterType<BaseService>().As<IBaseService>().InstancePerRequest();
             builder.RegisterType<FacadeDocument>().AsSelf().InstancePerRequest();
+            builder.RegisterType<FacadeHistory>().AsSelf().InstancePerRequest();
             builder.Register(c => new UnitOfWork(c.Resolve<DocumentContext>())).AsImplementedInterfaces().InstancePerRequest();
             var container = builder.Build();
             var resolver = new AutofacWebApiDependencyResolver(container);
