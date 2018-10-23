@@ -8,6 +8,8 @@ namespace MyDocuments.DAL.EF
     {
         public DbSet<Document> Documents { get; set; }
         public DbSet<History> Histories { get; set; }
+        public DbSet<FavouriteDocument> FavouriteDocuments { get; set; }
+
         static DocumentContext()
         {
             Database.SetInitializer<DocumentContext>(new DocumentDbInitializer());

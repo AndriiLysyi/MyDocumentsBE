@@ -11,6 +11,7 @@ namespace MyDocuments.DAL.Repositories
 
         private IDocumentRepository documentsRepository;
         private IHistoryRepository historyRepository;
+        private IFavouriteDocumentRepository favouriteDocumentsRepository;
 
         public UnitOfWork(DocumentContext context)
         {
@@ -19,6 +20,8 @@ namespace MyDocuments.DAL.Repositories
 
         public IDocumentRepository Documents => documentsRepository ?? (documentsRepository = new DocumentRepository(context));
         public IHistoryRepository Histories => historyRepository ?? (historyRepository = new HistoryRepository(context));
+
+        public IFavouriteDocumentRepository FavouriteDocuments => favouriteDocumentsRepository ?? (favouriteDocumentsRepository = new FavouriteDocumentRepository(context));
 
         public async Task SaveChangesAsync()
         {

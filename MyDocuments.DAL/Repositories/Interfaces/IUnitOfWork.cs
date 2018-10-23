@@ -10,8 +10,9 @@ namespace MyDocuments.DAL.Repositories.Interfaces
     {
         IDocumentRepository Documents { get; }
         IHistoryRepository Histories { get; }
+        IFavouriteDocumentRepository FavouriteDocuments { get; }
 
-         Task SaveChangesAsync();
+        Task SaveChangesAsync();
        
     }
 }

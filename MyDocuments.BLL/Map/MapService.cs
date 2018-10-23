@@ -78,6 +78,10 @@ namespace MyDocuments.BLL.Map
             dto.CreateDate = DateTime.UtcNow;
             return Mapper.Map<HistoryDTO, History>(dto, history);
         }
+        public static List<FavouriteDocumentDTO> ToListFavouriteDocumentDto(List<FavouriteDocument> favouriteDocuments)
+        {
+            return Mapper.Map<List<FavouriteDocument>, List<FavouriteDocumentDTO>>(favouriteDocuments);
+        }
 
     }
 }
