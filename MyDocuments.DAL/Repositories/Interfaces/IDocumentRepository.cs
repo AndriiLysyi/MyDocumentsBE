@@ -11,6 +11,7 @@ namespace MyDocuments.DAL.Repositories.Interfaces
     public interface IDocumentRepository: IRepository<Document>
     {
         Task<IQueryable<Document>> GetPagedList(string criterion, string direction);
+      
 
     }
 }

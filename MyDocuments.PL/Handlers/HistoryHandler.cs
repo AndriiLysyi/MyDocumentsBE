@@ -30,9 +30,7 @@ namespace MyDocuments.PL.Handlers
             }
             else
             {
-                if (int.TryParse(userid[userId].Value, out id))
-                { }
-                else
+                if (!int.TryParse(userid[userId].Value, out id))               
                     id = 1;
             }
 

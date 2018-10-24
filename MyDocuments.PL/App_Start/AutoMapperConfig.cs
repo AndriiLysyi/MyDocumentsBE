@@ -16,6 +16,7 @@ namespace MyDocuments.PL.App_Start
             {
                 config.CreateMap<Document, DocumentDTO>().ReverseMap();
                 config.CreateMap<History, HistoryDTO>().ReverseMap();
+                config.CreateMap<FavouriteDocument, FavouriteDocumentDTO>().ReverseMap();
             });
         }
     }

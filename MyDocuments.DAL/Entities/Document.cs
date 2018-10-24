@@ -16,6 +16,6 @@ namespace MyDocuments.DAL.Entities
         public DateTime CreateDate { get; set; }
         public Nullable<DateTime> ModifiedDate { get; set; }
 
-        public  virtual ICollection<FavouriteDocument> FavouriteDocuments { get; set; }
+        public  ICollection<FavouriteDocument> FavouriteDocuments { get; set; }
     }
 }

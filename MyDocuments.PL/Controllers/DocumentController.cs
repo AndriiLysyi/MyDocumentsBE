@@ -16,14 +16,13 @@ namespace MyDocuments.PL.Controllers
     {
         private readonly IDocumentService documentService;
         private readonly IHistoryService historyService;
+        
         public DocumentController(IDocumentService serv1, IHistoryService serv2)
         {
             this.documentService = serv1;
             this.historyService = serv2;
         }
-
-
-
+               
         [HttpGet]
         public async Task<HttpResponseMessage> Get()
         {
@@ -36,8 +35,7 @@ namespace MyDocuments.PL.Controllers
             const string message = "No documents in database.";
             return Request.CreateErrorResponse(HttpStatusCode.NoContent, message);
         }
-
-
+            
         [HttpPost]
         [Route("getDocuments")]
         public async Task<HttpResponseMessage> GetDocumentsByParameters([FromBody] DocumentsParameters documentsParameters)

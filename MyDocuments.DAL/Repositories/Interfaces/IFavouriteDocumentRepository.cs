@@ -9,6 +9,7 @@ namespace MyDocuments.DAL.Repositories.Interfaces
 {
     public interface IFavouriteDocumentRepository : IRepository<FavouriteDocument>
     {
-        Task<IQueryable<FavouriteDocument>> GetList(int id);
+        Task<IEnumerable<Document>> GetListFavouriteDocuments(int id);
+        Task<FavouriteDocument> GetFavouriteDocumentEntity(int idDocument, int idUser);
     }
 }

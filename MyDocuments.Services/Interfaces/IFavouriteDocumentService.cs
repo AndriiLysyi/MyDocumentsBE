@@ -9,6 +9,8 @@ namespace MyDocuments.Services.Interfaces
 {
    public interface IFavouriteDocumentService
     {
-        Task<List<FavouriteDocumentDTO>> GetFavouriteDocumentByUserId(int id);
+        Task<List<DocumentDTO>> GetFavouriteDocumentByUserId(int id);
+        Task DeleteDocumentFromFavourites(int documentId, int userId);
+        Task<FavouriteDocumentDTO> AddDocument(FavouriteDocumentDTO favouriteDocumentDTO);
     }
 }

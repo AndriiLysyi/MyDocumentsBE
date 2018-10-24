@@ -1,6 +1,7 @@
 ﻿using MyDocuments.BLL.DTO;
 using MyDocuments.BLL.Map;
 using MyDocuments.DAL.Repositories.Interfaces;
+using MyDocuments.PL.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,35 @@ namespace MyDocuments.BLL.Facades
         {
         }
 
-        public async Task<List<FavouriteDocumentDTO>> GetFavouriteDocumentsByUserIdAsync(int id)
+        public async Task<List<DocumentDTO>> GetFavouriteDocumentsByUserIdAsync(int id)
         {
-            var favouriteDocuments = await UoW.FavouriteDocuments.GetList(id);
-            var result = favouriteDocuments.ToList();
-            return MapService.ToListFavouriteDocumentDto(result);
+            var favouriteDocuments = await UoW.FavouriteDocuments.GetListFavouriteDocuments(id);
+
+            return MapService.ToListDto(favouriteDocuments.ToList());
+
+        }
+
+        public async Task<FavouriteDocumentDTO> AddDocumentToFavouriteAsync(FavouriteDocumentDTO favouriteDocumentDTO)
+        {
+            var document = MapService.FavouriteDocumentToEntity(favouriteDocumentDTO);
+            UoW.FavouriteDocuments.Add(document);
+            await UoW.FavouriteDocuments.SaveAsync();
+            return MapService.FavouriteDocumentToDto(document);
+
+        }
+
+        public async Task DeleteDocumentFromFavourites(int documentId, int userId)
+        {
+            var documentForDeleting = await UoW.FavouriteDocuments.GetFavouriteDocumentEntity(documentId, userId);
+               
+                if (documentForDeleting == null)
+                {
+                    throw new NotFoundDocumentException("There isn't document with id = {0}", documentId);
+                }           
+                
+            UoW.FavouriteDocuments.Remove(documentForDeleting);            
+
+            await UoW.FavouriteDocuments.SaveAsync();
         }
 
     }

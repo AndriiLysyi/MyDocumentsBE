@@ -15,9 +15,14 @@ namespace MyDocuments.DAL.Repositories
         public FavouriteDocumentRepository(DocumentContext context) : base(context)
         {
         }
-        public async Task<IQueryable<FavouriteDocument>> GetList(int id)
+        public async Task<IEnumerable<Document>> GetListFavouriteDocuments(int id)
+        {            
+            return await Context.FavouriteDocuments.Where(doc => doc.UserId == id).Select(i => i.Document).ToListAsync();        
+        }
+
+        public async Task<FavouriteDocument> GetFavouriteDocumentEntity(int idDocument, int idUser)
         {
-            return DbSet.Where(i => i.UserId == id).AsQueryable();
+            return await Context.FavouriteDocuments.Where(doc => doc.DocumentId== idDocument && doc.UserId==idUser).FirstOrDefaultAsync();
         }
     }
 }

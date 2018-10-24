@@ -9,22 +9,30 @@ using System.Threading.Tasks;
 
 namespace MyDocuments.Services.Services
 {
-    class FavouriteDocumentService : IFavouriteDocumentService
+    public class FavouriteDocumentService : IFavouriteDocumentService
     {
-      
-            private readonly FacadeFavouriteDocument facadeFavouriteDocument;
-            public FavouriteDocumentService(FacadeFavouriteDocument facade)
-            {
-                this.facadeFavouriteDocument = facade;
-            }
-            public async Task<List<FavouriteDocumentDTO>> GetFavouriteDocumentByUserId(int id)
-            {
-                if (id <= 0) throw new Exception("Id should be more than 0");
-               var favouriteDocument = await facadeFavouriteDocument.GetFavouriteDocumentsByUserIdAsync(id);
-              
-                return favouriteDocument;
-            }
-          
         
+        private readonly FacadeFavouriteDocument facadeFavouriteDocument;
+        public FavouriteDocumentService(FacadeFavouriteDocument facadeFav)
+        {
+            this.facadeFavouriteDocument = facadeFav;
+        }
+        public async Task<List<DocumentDTO>> GetFavouriteDocumentByUserId(int id)
+        {
+            if (id <= 0) throw new Exception("Id should be more than 0");
+            var favouriteDocument = await facadeFavouriteDocument.GetFavouriteDocumentsByUserIdAsync(id);
+
+            return favouriteDocument;
+        }
+        public async Task<FavouriteDocumentDTO> AddDocument(FavouriteDocumentDTO favouriteDocumentDTO)
+        {
+            return await facadeFavouriteDocument.AddDocumentToFavouriteAsync(favouriteDocumentDTO);
+        }
+
+        public async Task DeleteDocumentFromFavourites(int documentId, int userId)
+        {
+            await facadeFavouriteDocument.DeleteDocumentFromFavourites(documentId,userId);
+        }
+
     }
 }

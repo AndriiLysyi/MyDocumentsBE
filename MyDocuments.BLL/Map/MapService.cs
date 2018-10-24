@@ -29,6 +29,16 @@ namespace MyDocuments.BLL.Map
         {
             return Mapper.Map<DocumentDTO, Document>(documentsDTO);
         }
+
+        public static FavouriteDocumentDTO FavouriteDocumentToDto(FavouriteDocument favouriteDocument)
+        {
+            return Mapper.Map<FavouriteDocument, FavouriteDocumentDTO>(favouriteDocument);
+        }
+        public static FavouriteDocument FavouriteDocumentToEntity(FavouriteDocumentDTO favouriteDocumentDTO)
+        {
+            return Mapper.Map<FavouriteDocumentDTO, FavouriteDocument>(favouriteDocumentDTO);
+        }
+
         public static Document ToEntityForUpdate(DocumentDTO documentDTO, Document document)
         {
             documentDTO.Id = document.Id;

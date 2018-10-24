@@ -14,7 +14,7 @@
     <RootNamespace>MyDocuments.PL</RootNamespace>
     <AssemblyName>MyDocuments.PL</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -168,7 +168,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50261</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/MyDocuments</IISUrl>
+          <IISUrl>http://localhost/MyDocuments.PL</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

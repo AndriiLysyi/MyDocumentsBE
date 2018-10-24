@@ -14,7 +14,7 @@ namespace MyDocuments.DAL.Entities
         [ForeignKey("Document")]
         public int DocumentId { get; set; }
 
-        public  virtual Document Document { get; set; }
+        public  Document Document { get; set; }
     }
 
 }

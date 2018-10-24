@@ -17,7 +17,8 @@ namespace MyDocuments.DAL.Repositories
         public DocumentRepository(DocumentContext context) : base(context)
         {
         }
-        
+    
+      
         public async Task<IQueryable<Document>> GetPagedList( string criterion, string direction )
         {
             var nodeForExpressionTree = Expression.Parameter(typeof(Document), "n");
