@@ -24,7 +24,7 @@ namespace MyDocuments.PL.Controllers
             }
 
         [HttpGet]
-        public async Task<HttpResponseMessage> GetFavDoc(int idUser)
+        public async Task<HttpResponseMessage> GetFavDoc()
         {
             var userId = int.TryParse(Request.Properties[HistoryHandler.userId].ToString(), out int id);
             if (userId)
@@ -55,9 +55,9 @@ namespace MyDocuments.PL.Controllers
         }
 
         [HttpDelete]
-        public async Task<HttpResponseMessage> DeleteDocumentFromFavourites([FromBody]FavouriteDocumentDTO favouriteDocumentDTO)
+        public async Task<HttpResponseMessage> DeleteDocumentFromFavourites(FavouriteDocumentDTO favouriteDocumentDTO )
         {
-            await favouriteDocumentService.DeleteDocumentFromFavourites(favouriteDocumentDTO.DocumentId, favouriteDocumentDTO.UserId);
+            await favouriteDocumentService.DeleteDocumentFromFavourites( favouriteDocumentDTO.DocumentId, favouriteDocumentDTO.UserId);
 
             return Request.CreateResponse(HttpStatusCode.OK, $"Succesfully deleted document from favourites .");
         }

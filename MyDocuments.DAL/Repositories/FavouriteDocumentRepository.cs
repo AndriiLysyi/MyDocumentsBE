@@ -22,7 +22,7 @@ namespace MyDocuments.DAL.Repositories
 
         public async Task<FavouriteDocument> GetFavouriteDocumentEntity(int idDocument, int idUser)
         {
-            return await Context.FavouriteDocuments.Where(doc => doc.DocumentId== idDocument && doc.UserId==idUser).FirstOrDefaultAsync();
+            return await Context.FavouriteDocuments.Where(doc => (doc.DocumentId == idDocument && doc.UserId == idUser)).FirstOrDefaultAsync();
         }
     }
 }
