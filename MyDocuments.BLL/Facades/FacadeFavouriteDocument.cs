@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyDocuments.BLL.Facades
 {
-   public class FacadeFavouriteDocument: BaseFacade
+    public class FacadeFavouriteDocument : BaseFacade
     {
         public FacadeFavouriteDocument(IUnitOfWork uow) : base(uow)
         {
@@ -24,25 +24,33 @@ namespace MyDocuments.BLL.Facades
 
         }
 
-        public async Task<FavouriteDocumentDTO> AddDocumentToFavouriteAsync(FavouriteDocumentDTO favouriteDocumentDTO)
+        public async Task<bool> AddDocumentToFavouriteAsync(FavouriteDocumentDTO favouriteDocumentDTO)
         {
             var document = MapService.FavouriteDocumentToEntity(favouriteDocumentDTO);
-            UoW.FavouriteDocuments.Add(document);
-            await UoW.FavouriteDocuments.SaveAsync();
-            return MapService.FavouriteDocumentToDto(document);
+            var checkDocument = await UoW.FavouriteDocuments.GetFavouriteDocumentEntity(favouriteDocumentDTO.DocumentId, favouriteDocumentDTO.UserId);
+            if (checkDocument == null)
+            {
+                UoW.FavouriteDocuments.Add(document);
+            }
+            else
+                // throw new Exception("Document  already is a favourite document.");     
+                return false;
+            
 
+            await UoW.FavouriteDocuments.SaveAsync();
+            return true;
         }
 
         public async Task DeleteDocumentFromFavourites(int documentId, int userId)
         {
             var documentForDeleting = await UoW.FavouriteDocuments.GetFavouriteDocumentEntity(documentId, userId);
-               
-                if (documentForDeleting == null)
-                {
-                    throw new NotFoundDocumentException("There isn't document with id = {0}", documentId);
-                }           
-                
-            UoW.FavouriteDocuments.Remove(documentForDeleting);            
+
+            if (documentForDeleting == null)
+            {
+                throw new NotFoundDocumentException("There isn't document with id = {0}", documentId);
+            }
+
+            UoW.FavouriteDocuments.Remove(documentForDeleting);
 
             await UoW.FavouriteDocuments.SaveAsync();
         }

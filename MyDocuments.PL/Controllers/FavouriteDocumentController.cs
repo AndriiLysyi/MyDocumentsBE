@@ -45,13 +45,17 @@ namespace MyDocuments.PL.Controllers
         public async Task<HttpResponseMessage> Post([FromBody]FavouriteDocumentDTO favouriteDocumentDTO)
         {
            
-            var document = await favouriteDocumentService.AddDocument(favouriteDocumentDTO);
-            if (document != null)
+            bool success= await favouriteDocumentService.AddDocument(favouriteDocumentDTO);
+            if (success)
             {
-                return Request.CreateResponse(HttpStatusCode.Created, document);
+                var message = $"Document added to favourite";
+                return Request.CreateResponse(HttpStatusCode.Created,message);
             }
-            var message = $"Can`t add document to favourite ";
-            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, message);
+            else
+            {
+                var message = $"Document already is a favourite document ";
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, message);
+            }
         }
 
         [HttpDelete]

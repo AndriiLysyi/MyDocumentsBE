@@ -24,9 +24,10 @@ namespace MyDocuments.Services.Services
 
             return favouriteDocument;
         }
-        public async Task<FavouriteDocumentDTO> AddDocument(FavouriteDocumentDTO favouriteDocumentDTO)
+        public async Task<bool> AddDocument(FavouriteDocumentDTO favouriteDocumentDTO)
         {
             return await facadeFavouriteDocument.AddDocumentToFavouriteAsync(favouriteDocumentDTO);
+          
         }
 
         public async Task DeleteDocumentFromFavourites(int documentId, int userId)
